@@ -1,0 +1,406 @@
+{
+  "info": {
+    "name": "EMI Collection Voice Agent",
+    "description": "Gnani Agents Console + FastAPI. Requests are grouped by assignment section. Set the collection variables `base_url` and `webhook_key` before running; `call_id` and `conversation_id` are captured automatically by the Initial Message request.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "base_url", "value": "http://127.0.0.1:8000" },
+    { "key": "webhook_key", "value": "replace-with-WEBHOOK_API_KEY-from-.env" },
+    { "key": "call_id", "value": "" },
+    { "key": "conversation_id", "value": "" },
+    { "key": "gnani_base_url", "value": "https://api.inya.ai" },
+    { "key": "gnani_agent_id", "value": "156ed70ef8ce4502b64e7d27e2a2bdea" }
+  ],
+  "item": [
+    {
+      "name": "Health",
+      "item": [
+        {
+          "name": "GET /health (liveness)",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/health", "host": ["{{base_url}}"], "path": ["health"] }
+          }
+        },
+        {
+          "name": "GET /ready (storage ping)",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/ready", "host": ["{{base_url}}"], "path": ["ready"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "5.1 Initiate a call",
+      "item": [
+        {
+          "name": "POST /api/Initial_Message (valid)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('202 Accepted', () => pm.response.to.have.status(202));",
+                  "const body = pm.response.json();",
+                  "pm.collectionVariables.set('call_id', body.call_id);",
+                  "pm.test('call_id returned', () => pm.expect(body.call_id).to.be.a('string'));",
+                  "pm.test('phone is masked', () => pm.expect(body.e164_phone_masked).to.match(/^\\*+\\d{4}$/));",
+                  "pm.test('greeting withholds the amount', () => pm.expect(body.message).to.not.include('12,500'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customer_id\": \"CUST001\",\n  \"customer_name\": \"Rahul Sharma\",\n  \"phone_number\": \"9123456789\",\n  \"country_code\": \"+91\",\n  \"loan_account_number\": \"LAN123456\",\n  \"emi_amount\": 12500,\n  \"emi_due_date\": \"2026-07-30\",\n  \"preferred_language\": \"en-US\",\n  \"currency\": \"INR\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/Initial_Message",
+              "host": ["{{base_url}}"],
+              "path": ["api", "Initial_Message"]
+            },
+            "description": "Validates, stores the call, then calls Gnani twice: add_pre_call_variables followed by trigger_call. Returns 202 because the outcome only becomes known later, via the post-call webhook."
+          }
+        },
+        {
+          "name": "POST /api/Initial_Message (Spanish)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customer_id\": \"CUST008\",\n  \"customer_name\": \"Ana Torres\",\n  \"phone_number\": \"9894777308\",\n  \"country_code\": \"+91\",\n  \"loan_account_number\": \"LAN100008\",\n  \"emi_amount\": 12500,\n  \"emi_due_date\": \"2026-07-30\",\n  \"preferred_language\": \"es\",\n  \"currency\": \"INR\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/Initial_Message",
+              "host": ["{{base_url}}"],
+              "path": ["api", "Initial_Message"]
+            }
+          }
+        },
+        {
+          "name": "9.11 Invalid request -> 422",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": ["pm.test('422 rejected', () => pm.response.to.have.status(422));"]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customer_id\": \"\",\n  \"customer_name\": \"x\",\n  \"phone_number\": \"not-a-phone\",\n  \"loan_account_number\": \"L\",\n  \"emi_amount\": -5,\n  \"emi_due_date\": \"2026-07-30\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/Initial_Message",
+              "host": ["{{base_url}}"],
+              "path": ["api", "Initial_Message"]
+            },
+            "description": "Empty customer_id, malformed phone and a negative amount all fail Pydantic validation."
+          }
+        },
+        {
+          "name": "Bulk upload CSV",
+          "request": {
+            "method": "POST",
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                { "key": "file", "type": "file", "src": "samples/bulk_calls.csv" }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/calls/bulk",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "calls", "bulk"]
+            },
+            "description": "Each row is validated independently, so one bad row cannot abort the batch."
+          }
+        }
+      ]
+    },
+    {
+      "name": "5.2 Dynamic Messages (Gnani -> us)",
+      "item": [
+        {
+          "name": "POST /api/v1/gnani/dynamic-message",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('200 OK', () => pm.response.to.have.status(200));",
+                  "const d = pm.response.json().additional_info.inya_data;",
+                  "pm.test('text present', () => pm.expect(d.text).to.be.a('string').and.not.empty);",
+                  "pm.test('user_context present', () => pm.expect(d.user_context).to.be.an('object'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"conversation_id\": \"{{$guid}}\",\n  \"mobile\": \"9123456789\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/gnani/dynamic-message",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "gnani", "dynamic-message"]
+            },
+            "description": "Simulates what Gnani sends at call start. Note `mobile` is the national number with no country code -- correlation is by phone suffix. This is also where conversation_id gets bound to our call_id.\n\nAlways returns 200: a non-2xx here would break the live call."
+          }
+        }
+      ]
+    },
+    {
+      "name": "5.3 Post-call webhook (Gnani -> us)",
+      "item": [
+        {
+          "name": "PTP_FUTURE with a spoken date",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('200 processed', () => pm.response.to.have.status(200));",
+                  "pm.test('processed', () => pm.expect(pm.response.json().status).to.eql('processed'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "X-Webhook-Key", "value": "{{webhook_key}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"conversation_id\": \"{{conversation_id}}\",\n  \"event_id\": \"evt-{{$randomUUID}}\",\n  \"DISPOSITION\": \"PTP_FUTURE\",\n  \"ptp_date\": \"the thirtieth\",\n  \"partial_amount\": \"\",\n  \"disposition_reason\": \"Customer said 'I can pay on the thirtieth' and confirmed on readback.\",\n  \"disposition_summary\": \"Identity confirmed. Customer acknowledged the overdue instalment and committed to a date.\",\n  \"language_captured\": \"English\",\n  \"customer_sentiment\": \"Cooperative\",\n  \"call_status\": \"completed\",\n  \"call_duration_seconds\": 68,\n  \"transcript\": [\n    { \"speaker\": \"agent\", \"text\": \"May I confirm whether I am speaking with Rahul Sharma?\" },\n    { \"speaker\": \"customer\", \"text\": \"yes speaking\" },\n    { \"speaker\": \"customer\", \"text\": \"I can pay on the thirtieth\" }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/webhooks/post-call",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "webhooks", "post-call"]
+            },
+            "description": "Note the field is named DISPOSITION -- the console reserves that name and rejects the whole bot config otherwise. `stage_code` and `STAGE_CODE` are also accepted via alias.\n\n`ptp_date` carries the raw spoken phrase; the server resolves it against the real call date rather than trusting the model."
+          }
+        },
+        {
+          "name": "9.10 Duplicate delivery -> duplicate_ignored",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('200 not 409', () => pm.response.to.have.status(200));",
+                  "pm.test('absorbed', () => pm.expect(pm.response.json().status).to.eql('duplicate_ignored'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "X-Webhook-Key", "value": "{{webhook_key}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"conversation_id\": \"{{conversation_id}}\",\n  \"event_id\": \"evt-fixed-for-duplicate-test\",\n  \"DISPOSITION\": \"PTP_TODAY\",\n  \"ptp_date\": \"today\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/webhooks/post-call",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "webhooks", "post-call"]
+            },
+            "description": "Send this twice. The second call returns 200 duplicate_ignored -- never 409, because a non-2xx would invite Gnani to retry and manufacture more duplicates. Idempotency is enforced by a unique index on event_id."
+          }
+        },
+        {
+          "name": "Guardrail: vague promise -> UNCLEAR",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "X-Webhook-Key", "value": "{{webhook_key}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"conversation_id\": \"{{conversation_id}}\",\n  \"event_id\": \"evt-{{$randomUUID}}\",\n  \"DISPOSITION\": \"PTP_FUTURE\",\n  \"ptp_date\": \"\",\n  \"disposition_reason\": \"Customer said 'I will try next month'.\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/webhooks/post-call",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "webhooks", "post-call"]
+            },
+            "description": "The model reports PTP_FUTURE, but a promise with no date is not a promise. The server stores UNCLEAR and records why in disposition_adjustments. Assignment section 2 forbids assumption-based dispositions."
+          }
+        },
+        {
+          "name": "Auth: missing X-Webhook-Key -> 401",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": ["pm.test('401 unauthorised', () => pm.response.to.have.status(401));"]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"conversation_id\": \"anything\",\n  \"DISPOSITION\": \"RNR\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/webhooks/post-call",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "webhooks", "post-call"]
+            }
+          }
+        },
+        {
+          "name": "Unmatched conversation -> 202 dead-lettered",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "X-Webhook-Key", "value": "{{webhook_key}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"conversation_id\": \"no-such-conversation\",\n  \"event_id\": \"evt-{{$randomUUID}}\",\n  \"DISPOSITION\": \"RNR\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/webhooks/post-call",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "webhooks", "post-call"]
+            },
+            "description": "Stored in webhook_dlq rather than dropped, and answered 202 -- a retry cannot fix an unmatched event, so a non-2xx would only cause a storm."
+          }
+        }
+      ]
+    },
+    {
+      "name": "6 Dashboard API",
+      "item": [
+        {
+          "name": "GET /api/v1/calls (all)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v1/calls",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "calls"]
+            },
+            "description": "Returns count, the eight summary-card values, stage-code distribution, and the 13-field rows. Phone numbers are masked at this boundary."
+          }
+        },
+        {
+          "name": "GET /api/v1/calls (all seven filters)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v1/calls?call_date=2026-07-30&call_status=COMPLETED&stage_code=PTP_TODAY&customer_id=CUST001&loan_account_number=LAN&language=English&ptp_date=2026-07-30",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "calls"],
+              "query": [
+                { "key": "call_date", "value": "2026-07-30" },
+                { "key": "call_status", "value": "COMPLETED" },
+                { "key": "stage_code", "value": "PTP_TODAY" },
+                { "key": "customer_id", "value": "CUST001" },
+                { "key": "loan_account_number", "value": "LAN" },
+                { "key": "language", "value": "English" },
+                { "key": "ptp_date", "value": "2026-07-30" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "GET /api/v1/calls/{call_id}",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('200 OK', () => pm.response.to.have.status(200));",
+                  "const b = pm.response.json();",
+                  "pm.test('no unmasked phone leaks', () => pm.expect(JSON.stringify(b)).to.not.include('phone_e164'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v1/calls/{{call_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "calls", "{{call_id}}"]
+            },
+            "description": "The 11 section 6.1 detail fields, including the raw gnani_response and post_call_payload."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Gnani platform (reference only)",
+      "item": [
+        {
+          "name": "Gnani: add_pre_call_variables",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"botId\": \"{{gnani_agent_id}}\",\n  \"preCallVariables\": {\n    \"customer_name\": \"Rahul Sharma\",\n    \"loan_last4\": \"3456\",\n    \"emi_amount\": \"12,500\",\n    \"emi_due_date_spoken\": \"30 July 2026\",\n    \"currency_word\": \"rupees\",\n    \"current_date_spoken\": \"29 July 2026\",\n    \"lender_name\": \"ICICI Bank\",\n    \"preferred_language\": \"en-US\",\n    \"disclosure_line\": \"Thank you, Rahul Sharma. Your monthly instalment of 12,500 rupees was due on 30 July 2026.\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{gnani_base_url}}/analytics/add_pre_call_variables",
+              "host": ["{{gnani_base_url}}"],
+              "path": ["analytics", "add_pre_call_variables"]
+            },
+            "description": "UNDOCUMENTED. Recovered by inspecting the Agents Console's own network traffic. Variables are keyed to the bot, not to a call, so this must immediately precede its trigger -- concurrent calls on one agent would clobber each other."
+          }
+        },
+        {
+          "name": "Gnani: trigger_call",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"phone\": \"9123456789\",\n  \"name\": \"Rahul Sharma\",\n  \"countryCode\": \"+91\"\n}"
+            },
+            "url": {
+              "raw": "{{gnani_base_url}}/genbots/trigger_call/v3/{{gnani_agent_id}}?environment=production",
+              "host": ["{{gnani_base_url}}"],
+              "path": ["genbots", "trigger_call", "v3", "{{gnani_agent_id}}"],
+              "query": [{ "key": "environment", "value": "production" }]
+            },
+            "description": "UNDOCUMENTED. Returns 200 {\"status\":\"success\",\"message\":\"Call is being triggered to ...\",\"response\":{\"data\":null}}.\n\nNote data:null -- no conversation or call id is returned, which is why correlation depends on the Dynamic Messages callback.\n\nRequires console session auth; included for reference, not as a runnable request."
+          }
+        }
+      ]
+    }
+  ]
+}

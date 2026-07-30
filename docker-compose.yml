@@ -1,0 +1,62 @@
+# docker compose up            -> api + mongo
+# docker compose --profile mock up  -> also starts the mock Agents Console, so
+#                                      the full call loop runs with no Gnani
+#                                      account and no credits.
+#
+# Secrets come from .env (git-ignored); nothing sensitive is defined here.
+
+services:
+  mongo:
+    image: mongo:7
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    healthcheck:
+      # The API waits on this, so it never starts against a cold database.
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+  api:
+    build: .
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    environment:
+      # Container-internal hostnames override whatever .env holds for local runs.
+      MONGO_URI: mongodb://mongo:27017
+      STORAGE_BACKEND: ${STORAGE_BACKEND:-mongo}
+      # Point at the mock by default when the mock profile is active; override
+      # with GNANI_BASE_URL=https://api.inya.ai to hit the real platform.
+      GNANI_BASE_URL: ${GNANI_BASE_URL:-http://mock-gnani:9100}
+    depends_on:
+      mongo:
+        condition: service_healthy
+    volumes:
+      # Only used by the JSON fallback backend.
+      - api-data:/app/data
+
+  mock-gnani:
+    profiles: ["mock"]
+    build: .
+    restart: unless-stopped
+    ports:
+      - "9100:9100"
+    environment:
+      APP_BASE_URL: http://api:8000
+      WEBHOOK_API_KEY: ${WEBHOOK_API_KEY}
+      MOCK_CALL_SECONDS: ${MOCK_CALL_SECONDS:-3}
+    command:
+      ["uvicorn", "tests.mock_gnani.main:app", "--host", "0.0.0.0", "--port", "9100"]
+    depends_on:
+      - api
+
+volumes:
+  mongo-data:
+  api-data:
