@@ -296,20 +296,44 @@ a { color: var(--accent); }
 .btn-primary:hover { filter: brightness(1.08); color: #fff; }
 .btn-sm { font-size: 12.5px; padding: 4px 10px; }
 
-.file-btn {
-  position: relative;
-  overflow: hidden;
-  display: inline-block;
-  font-size: 12.5px;
-  font-weight: 550;
-  padding: 5px 11px;
-  border: 1px dashed var(--line);
-  border-radius: 7px;
-  color: var(--ink-dim);
-  cursor: pointer;
-}
-.file-btn:hover { border-color: var(--accent); color: var(--accent); }
+.file-btn { position: relative; overflow: hidden; cursor: pointer; }
 .file-btn input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+
+/* ---------- bulk upload panel ---------- */
+
+.bulk-panel {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 28px;
+  flex-wrap: wrap;
+}
+.bulk-copy { flex: 1 1 340px; }
+.bulk-text {
+  margin: 0 0 8px;
+  font-size: 13.5px;
+  color: var(--ink-dim);
+  max-width: 62ch;
+}
+.bulk-cols {
+  margin: 0;
+  font-size: 11.5px;
+  color: var(--ink-faint);
+  line-height: 1.9;
+}
+.bulk-cols code { font-size: 11px; }
+.bulk {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+}
+.bulk-hint { font-size: 11.5px; color: var(--ink-faint); }
+
+@media (max-width: 720px) {
+  .bulk { align-items: stretch; }
+  .bulk-hint { text-align: center; }
+}
 
 /* ---------- table ---------- */
 

@@ -44,18 +44,36 @@
 </section>
 {% endif %}
 
+{# --- Bulk call initiation (section 14 bonus) -------------------------- #}
+<section class="panel bulk-panel">
+  <div class="bulk-copy">
+    <h2 class="panel-title">Bulk call initiation</h2>
+    <p class="bulk-text">
+      Upload a CSV to initiate a call per row. Each row is validated
+      independently, so one bad row cannot abort the batch &mdash; rejected rows
+      are reported back with the line number and the reason.
+    </p>
+    <p class="bulk-cols">
+      <code>customer_id</code>, <code>customer_name</code>,
+      <code>phone_number</code>, <code>country_code</code>,
+      <code>loan_account_number</code>, <code>emi_amount</code>,
+      <code>emi_due_date</code>, <code>preferred_language</code>,
+      <code>currency</code>
+    </p>
+  </div>
+  <form class="bulk" action="/api/v1/calls/bulk" method="post"
+        enctype="multipart/form-data">
+    <label class="btn btn-primary file-btn">
+      <input type="file" name="file" accept=".csv" onchange="this.form.submit()">
+      Choose CSV&hellip;
+    </label>
+    <span class="bulk-hint">sample: <code>samples/bulk_calls.csv</code></span>
+  </form>
+</section>
+
 {# --- Section 6.2: seven filters --------------------------------------- #}
 <section class="panel">
-  <div class="panel-head">
-    <h2 class="panel-title">Filters</h2>
-    <form class="bulk" action="/api/v1/calls/bulk" method="post"
-          enctype="multipart/form-data">
-      <label class="file-btn">
-        <input type="file" name="file" accept=".csv" onchange="this.form.submit()">
-        Bulk upload CSV
-      </label>
-    </form>
-  </div>
+  <h2 class="panel-title">Filters</h2>
 
   <form class="filters" method="get" action="/">
     <label>Call date
