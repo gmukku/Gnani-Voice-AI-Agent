@@ -152,6 +152,11 @@ pass through `mock_gnani`, and the behaviour is specified in
 `gnani/system_prompt.md` and `gnani/conversation_flow.md`, but **neither has been
 observed on a live conversation.** Stated plainly rather than implied.
 
+Spanish was added to the agent after these five calls were captured, so all
+existing audio is English. Section 3.3 is configured — both languages on the
+agent, and a Language Switch Prompt naming exactly those two — but the switch
+itself has not been demonstrated live.
+
 The identity gate that scenario 7 depends on *was* exercised live — every real
 call withheld the amount until identity was confirmed.
 

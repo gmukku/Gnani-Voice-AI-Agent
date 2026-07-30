@@ -117,7 +117,12 @@ support the required languages. See `docs/engineering_log.md` C2.
 **English (US)** and **Spanish**, English primary.
 
 The agent's language list and the Language Switch Prompt must name exactly the
-same languages. If they diverge, switching fails silently at runtime.
+same languages. If they diverge, switching fails silently at runtime — the
+prompt in `language_switch_prompt.md` names exactly these two.
+
+Spanish was added after the five calls in `samples/recordings/` were captured, so
+all existing audio is English. Section 3.3 is configured but the switch has not
+been observed on a live conversation — see `docs/test_results.md`.
 
 ---
 

@@ -9,10 +9,20 @@ Everything for **Configuration → Conversation Flow** in the Gnani Agents Conso
 Supports dynamic variables. Paste exactly:
 
 ```
-Hello, this is a call regarding your loan account ending in {{ loan_last4 }}. May I confirm whether I am speaking with {{ customer_name }}?
+Hello, this is a call from {{ lender_name }} regarding your loan account ending in {{ loan_last4 }}. May I confirm whether I am speaking with {{ customer_name }}?
 ```
 
-**Why it is worded this way.** It names the customer and the account's last four digits only. It deliberately does **not** state the EMI amount or the due date, because assignment section 5.2 requires that sensitive information is withheld until identity is reasonably confirmed. The amount is spoken later, at stage 2 of the system prompt, via `disclosure_line`.
+**Why it is worded this way.** It names the lender, the customer, and the
+account's last four digits only. It deliberately does **not** state the EMI
+amount or the due date, because assignment section 5.2 requires that sensitive
+information is withheld until identity is reasonably confirmed. The amount is
+spoken later, at stage 2 of the system prompt, via `disclosure_line`.
+
+`lender_name` is in the opening line because an earlier version omitted it, and
+live testing showed the agent answering "who is this?" with "I am calling from
+the lender" — unconvincing, and wrong for collections, where the caller must
+identify itself. The recordings in `samples/recordings/` predate this change and
+still carry the older opening.
 
 > The assignment's own worked example discloses the amount *before* confirming identity. We follow the stated rule instead of the example — see README.
 
