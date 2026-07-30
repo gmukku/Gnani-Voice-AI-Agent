@@ -23,7 +23,7 @@ from datetime import date, datetime
 from typing import Any
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request, UploadFile, status
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 
 from app.db.repository import CallRepository
@@ -201,11 +201,25 @@ async def get_call(
     summary="Bulk-initiate calls from a CSV upload",
 )
 async def bulk_upload(
+    request: Request,
     file: UploadFile,
     service: CallService = Depends(get_call_service),
-) -> dict[str, Any]:
-    """Each row is validated independently, so one bad row cannot abort the batch."""
+) -> Any:
+    """Each row is validated independently, so one bad row cannot abort the batch.
+
+    Content-negotiated: an API client gets JSON, while the dashboard's upload
+    form (which the browser submits directly) is redirected back to the table
+    with a result banner. Without this, uploading from the UI navigates the
+    browser to a page of raw JSON.
+    """
+    wants_html = "text/html" in request.headers.get("accept", "")
+
     if not (file.filename or "").lower().endswith(".csv"):
+        if wants_html:
+            return RedirectResponse(
+                "/?upload_error=Expected+a+.csv+file",
+                status_code=status.HTTP_303_SEE_OTHER,
+            )
         raise HTTPException(
             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
             detail="Expected a .csv file",
@@ -219,19 +233,27 @@ async def bulk_upload(
 
     for line, row in enumerate(reader, start=2):
         try:
-            request = InitialMessageRequest.model_validate(
+            # Not named `request`: that would shadow the HTTP Request parameter.
+            call_request = InitialMessageRequest.model_validate(
                 {k: v for k, v in row.items() if v not in (None, "")}
             )
         except ValueError as exc:
             rejected.append({"line": line, "error": str(exc)[:200]})
             continue
         try:
-            record = await service.initiate(request)
+            record = await service.initiate(call_request)
             accepted.append(record["call_id"])
         except Exception as exc:  # noqa: BLE001 - one failure must not stop the batch
             rejected.append({"line": line, "error": str(exc)[:200]})
 
     log.info("bulk_upload.done", accepted=len(accepted), rejected=len(rejected))
+
+    if wants_html:
+        return RedirectResponse(
+            f"/?uploaded={len(accepted)}&rejected={len(rejected)}",
+            status_code=status.HTTP_303_SEE_OTHER,
+        )
+
     return {
         "accepted": len(accepted),
         "rejected": len(rejected),
@@ -248,6 +270,9 @@ async def bulk_upload(
 @router.get("/", response_class=HTMLResponse, include_in_schema=False)
 async def dashboard_page(
     request: Request,
+    uploaded: int | None = Query(default=None),
+    rejected: int | None = Query(default=None),
+    upload_error: str | None = Query(default=None),
     filters: dict[str, Any] = Depends(_filter_params),
     repo: CallRepository = Depends(get_repo),
 ) -> HTMLResponse:
@@ -263,6 +288,9 @@ async def dashboard_page(
             "statuses": [s.value for s in CallStatus],
             "stage_codes": [s.value for s in StageCode],
             "languages": ["English", "Spanish", "Mixed"],
+            "uploaded": uploaded,
+            "rejected": rejected,
+            "upload_error": upload_error,
         },
     )
 

@@ -86,12 +86,18 @@
     <h2 class="panel-title">
       Transcript <span class="count">{{ call.conversation_transcript | length }}</span>
     </h2>
-    {% if call.recording_url %}
-    <a class="btn btn-sm" href="{{ call.recording_url }}" target="_blank" rel="noopener">
-      Recording
-    </a>
-    {% endif %}
   </div>
+
+  {# Section 14 bonus: playback in the page, not a link out. Only rendered when
+     Gnani actually returned a recording URL. #}
+  {% if call.recording_url %}
+  <div class="player">
+    <audio controls preload="none" src="{{ call.recording_url }}">
+      Your browser cannot play this recording.
+      <a href="{{ call.recording_url }}">Download it instead</a>.
+    </audio>
+  </div>
+  {% endif %}
 
   {% if call.conversation_transcript %}
   <div class="chat">

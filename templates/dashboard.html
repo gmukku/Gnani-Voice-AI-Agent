@@ -3,6 +3,18 @@
 
 {% block content %}
 
+{# Result of a CSV upload. The form posts straight from the browser, so the
+   endpoint redirects back here rather than leaving raw JSON on screen. #}
+{% if upload_error %}
+<section class="banner banner-bad">{{ upload_error }}</section>
+{% elif uploaded is not none %}
+<section class="banner banner-ok">
+  Uploaded <strong>{{ uploaded }}</strong> call{{ '' if uploaded == 1 else 's' }}.
+  {% if rejected %}<strong>{{ rejected }}</strong> row{{ '' if rejected == 1 else 's' }}
+  rejected — see the API response for per-row errors.{% endif %}
+</section>
+{% endif %}
+
 {# --- Section 6.2: eight summary cards --------------------------------- #}
 <section class="cards" aria-label="Summary">
   {% for label, value in summary.items() %}

@@ -238,7 +238,9 @@ async def _run_call(
             "call_duration_seconds": int((ended - started).total_seconds()),
             "call_started_at": started.isoformat(),
             "call_ended_at": ended.isoformat(),
-            "recording_url": f"https://example.invalid/recordings/{conversation_id}.wav",
+            # Left empty on purpose: a fake URL renders as a dead link on the
+            # dashboard. Real recordings arrive from Gnani on live calls.
+            "recording_url": "",
             "transcript": transcript,
         }
 
