@@ -5,9 +5,14 @@
 #
 # Secrets come from .env (git-ignored); nothing sensitive is defined here.
 
+# Names the Compose project, so everything groups under one heading in Docker
+# Desktop instead of being derived from the directory name.
+name: emi-voice-agent
+
 services:
   mongo:
     image: mongo:7
+    container_name: emi-voice-agent-mongo
     restart: unless-stopped
     ports:
       - "27017:27017"
@@ -23,6 +28,8 @@ services:
 
   api:
     build: .
+    image: emi-voice-agent/api:1.0.0
+    container_name: emi-voice-agent-api
     restart: unless-stopped
     ports:
       - "8000:8000"
@@ -32,9 +39,12 @@ services:
       # Container-internal hostnames override whatever .env holds for local runs.
       MONGO_URI: mongodb://mongo:27017
       STORAGE_BACKEND: ${STORAGE_BACKEND:-mongo}
-      # Point at the mock by default when the mock profile is active; override
-      # with GNANI_BASE_URL=https://api.inya.ai to hit the real platform.
-      GNANI_BASE_URL: ${GNANI_BASE_URL:-http://mock-gnani:9100}
+      # Deliberately a *different* variable name from GNANI_BASE_URL. .env holds
+      # the host-side value (127.0.0.1) for running uvicorn directly, and inside
+      # a container that address points at the container itself -- so reusing the
+      # name here would silently make the API dial itself.
+      # To hit the real platform: GNANI_BASE_URL_DOCKER=https://api.inya.ai
+      GNANI_BASE_URL: ${GNANI_BASE_URL_DOCKER:-http://mock-gnani:9100}
     depends_on:
       mongo:
         condition: service_healthy
@@ -45,6 +55,8 @@ services:
   mock-gnani:
     profiles: ["mock"]
     build: .
+    image: emi-voice-agent/mock-console:1.0.0
+    container_name: emi-voice-agent-mock-console
     restart: unless-stopped
     ports:
       - "9100:9100"

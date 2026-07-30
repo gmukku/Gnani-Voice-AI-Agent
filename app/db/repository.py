@@ -53,6 +53,29 @@ def _jsonable(value: Any) -> Any:
     return value
 
 
+def _bson_safe(value: Any) -> Any:
+    """Convert ``date`` to an ISO string; leave ``datetime`` native.
+
+    BSON has no date-only type and rejects ``datetime.date`` outright with
+    ``InvalidDocument``. Timestamps stay as real BSON datetimes so Mongo can
+    sort and range-query them; date-only fields (``emi_due_date``, ``ptp_date``)
+    become ISO strings, which is also what the JSON backend stores, so both
+    backends agree on those fields.
+
+    The ``datetime`` check must come first: ``datetime`` is a subclass of
+    ``date``, so testing for ``date`` alone would stringify every timestamp.
+    """
+    if isinstance(value, datetime):
+        return value
+    if isinstance(value, date):
+        return value.isoformat()
+    if isinstance(value, dict):
+        return {k: _bson_safe(v) for k, v in value.items()}
+    if isinstance(value, (list, tuple)):
+        return [_bson_safe(v) for v in value]
+    return value
+
+
 class CallRepository(Protocol):
     """Storage operations the application needs."""
 
@@ -113,14 +136,15 @@ class MongoCallRepository:
             return False
 
     async def insert_call(self, record: dict[str, Any]) -> None:
-        await self._db[CALLS].insert_one(dict(record))
+        await self._db[CALLS].insert_one(_bson_safe(dict(record)))
 
     async def get_call(self, call_id: str) -> dict[str, Any] | None:
         return await self._db[CALLS].find_one({"call_id": call_id}, {"_id": 0})
 
     async def update_call(self, call_id: str, changes: dict[str, Any]) -> bool:
         result = await self._db[CALLS].update_one(
-            {"call_id": call_id}, {"$set": {**changes, "updated_at": utcnow()}}
+            {"call_id": call_id},
+            {"$set": _bson_safe({**changes, "updated_at": utcnow()})},
         )
         return result.matched_count > 0
 
@@ -168,14 +192,23 @@ class MongoCallRepository:
 
     async def dead_letter(self, reason: str, payload: dict[str, Any]) -> None:
         await self._db[DLQ].insert_one(
-            {"reason": reason, "payload": payload, "received_at": utcnow()}
+            _bson_safe(
+                {"reason": reason, "payload": payload, "received_at": utcnow()}
+            )
         )
 
     async def audit(
         self, call_id: str, action: str, detail: dict[str, Any]
     ) -> None:
         await self._db[AUDIT].insert_one(
-            {"call_id": call_id, "action": action, "detail": detail, "at": utcnow()}
+            _bson_safe(
+                {
+                    "call_id": call_id,
+                    "action": action,
+                    "detail": detail,
+                    "at": utcnow(),
+                }
+            )
         )
 
     async def close(self) -> None:
