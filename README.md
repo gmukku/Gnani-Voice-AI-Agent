@@ -4,6 +4,18 @@ An outbound AI voice agent for EMI (loan instalment) payment collection, built o
 Gnani Agents Console with a Python FastAPI backend, structured disposition capture and
 a call-outcome dashboard.
 
+> ### 📓 [`docs/engineering_log.md`](docs/engineering_log.md)
+>
+> **26 problems found and resolved during this build**, each with its diagnosis:
+> 8 pieces of undocumented platform behaviour (including recovering the
+> call-trigger API from network traffic, and reading the real webhook contract out
+> of the dead-letter queue), 11 defects found by running the system, 4
+> contradictions in the specification, and 3 account-side blockers.
+>
+> Three design decisions in this repository exist *because* of what is in that
+> log, not by preference. It is the best single view of how the integration was
+> actually built.
+
 - [1. What this does](#1-what-this-does)
 - [2. Architecture](#2-architecture)
 - [3. Quick start](#3-quick-start)
