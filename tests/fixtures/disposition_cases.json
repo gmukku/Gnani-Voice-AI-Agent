@@ -1,0 +1,264 @@
+{
+  "_comment": [
+    "Labelled corpus for the disposition guardrail.",
+    "",
+    "Each case records what the extraction model reported (model_disposition,",
+    "model_ptp_date) alongside the disposition the system should actually store",
+    "(expected_stage_code). Where those differ, the case is testing that the",
+    "server-side guardrail corrects or refuses the model's answer.",
+    "",
+    "call_date is fixed at 2026-07-29 (a Wednesday) so relative expressions are",
+    "deterministic. ptp_offset_days is measured from that date."
+  ],
+  "call_date": "2026-07-29",
+  "cases": [
+    {
+      "id": "S01-ptp-today",
+      "scenario": "Customer commits to paying today",
+      "utterance": "yes I will pay it today",
+      "model_disposition": "PTP_TODAY",
+      "model_ptp_date": "today",
+      "expected_stage_code": "PTP_TODAY",
+      "ptp_offset_days": 0
+    },
+    {
+      "id": "S02-ptp-future",
+      "scenario": "Customer names a future date",
+      "utterance": "I can pay on the fifteenth of August",
+      "model_disposition": "PTP_FUTURE",
+      "model_ptp_date": "2026-08-15",
+      "expected_stage_code": "PTP_FUTURE",
+      "ptp_offset_days": 17
+    },
+    {
+      "id": "S03-already-paid",
+      "scenario": "Payment already complete",
+      "utterance": "I already paid that last week",
+      "model_disposition": "ALREADY_PAID",
+      "model_ptp_date": "",
+      "expected_stage_code": "ALREADY_PAID",
+      "ptp_offset_days": null
+    },
+    {
+      "id": "S04-callback",
+      "scenario": "Callback at a specific time",
+      "utterance": "call me back on Thursday at four",
+      "model_disposition": "CALLBACK_SCHEDULED",
+      "model_ptp_date": "",
+      "expected_stage_code": "CALLBACK_SCHEDULED",
+      "ptp_offset_days": null
+    },
+    {
+      "id": "S05-rtp-financial",
+      "scenario": "Cannot pay, financial hardship",
+      "utterance": "I lost my job, I cannot pay right now",
+      "model_disposition": "RTP_FINANCIAL",
+      "model_ptp_date": "",
+      "expected_stage_code": "RTP_FINANCIAL",
+      "ptp_offset_days": null
+    },
+    {
+      "id": "S06-dispute-charges",
+      "scenario": "Disputes the amount",
+      "utterance": "the amount is wrong, I owe less than that",
+      "model_disposition": "DISPUTE_CHARGES",
+      "model_ptp_date": "",
+      "expected_stage_code": "DISPUTE_CHARGES",
+      "ptp_offset_days": null
+    },
+    {
+      "id": "S07-third-party",
+      "scenario": "Someone else answered",
+      "utterance": "he is my brother, he is not home",
+      "model_disposition": "THIRD_PARTY",
+      "model_ptp_date": "",
+      "expected_stage_code": "THIRD_PARTY",
+      "ptp_offset_days": null
+    },
+    {
+      "id": "S08-language-switch",
+      "scenario": "Customer switches to Spanish and commits",
+      "utterance": "puedo pagar el treinta",
+      "model_disposition": "PTP_FUTURE",
+      "model_ptp_date": "el treinta",
+      "expected_stage_code": "PTP_TOMORROW",
+      "ptp_offset_days": 1,
+      "note": "Spanish cardinal must resolve, then be reconciled: the 30th is tomorrow."
+    },
+    {
+      "id": "S09-dscn",
+      "scenario": "Call dropped mid-conversation",
+      "utterance": "hold on a second",
+      "model_disposition": "DSCN",
+      "model_ptp_date": "",
+      "expected_stage_code": "DSCN",
+      "ptp_offset_days": null
+    },
+    {
+      "id": "G01-spoken-ordinal",
+      "scenario": "Real transcript: spoken ordinal day",
+      "utterance": "i can pay on the thirtieth",
+      "model_disposition": "PTP_FUTURE",
+      "model_ptp_date": "the thirtieth",
+      "expected_stage_code": "PTP_TOMORROW",
+      "ptp_offset_days": 1,
+      "note": "Taken from an actual call. Model said FUTURE; the 30th is tomorrow."
+    },
+    {
+      "id": "G02-vague-try",
+      "scenario": "Vague intent reported as a promise",
+      "utterance": "I will try next month",
+      "model_disposition": "PTP_FUTURE",
+      "model_ptp_date": "",
+      "expected_stage_code": "UNCLEAR",
+      "ptp_offset_days": null,
+      "note": "The single most important case: a promise with no date is not a promise."
+    },
+    {
+      "id": "G03-vague-soon",
+      "scenario": "\"As soon as I can\" reported as a promise",
+      "utterance": "I will pay as soon as I can",
+      "model_disposition": "PTP_FUTURE",
+      "model_ptp_date": "as soon as I can",
+      "expected_stage_code": "UNCLEAR",
+      "ptp_offset_days": null
+    },
+    {
+      "id": "G04-past-date",
+      "scenario": "Model returns a date already gone",
+      "utterance": "I paid on the first",
+      "model_disposition": "PTP_FUTURE",
+      "model_ptp_date": "2026-07-01",
+      "expected_stage_code": "UNCLEAR",
+      "ptp_offset_days": null
+    },
+    {
+      "id": "G05-absurd-date",
+      "scenario": "Model returns a date years out",
+      "utterance": "maybe in a couple of years",
+      "model_disposition": "PTP_FUTURE",
+      "model_ptp_date": "2029-01-01",
+      "expected_stage_code": "UNCLEAR",
+      "ptp_offset_days": null
+    },
+    {
+      "id": "G06-invalid-code",
+      "scenario": "Model invents a code outside the enum",
+      "utterance": "I guess so",
+      "model_disposition": "MAYBE_WILL_PAY",
+      "model_ptp_date": "",
+      "expected_stage_code": "UNCLEAR",
+      "ptp_offset_days": null
+    },
+    {
+      "id": "G07-today-mislabelled",
+      "scenario": "Model says TODAY but names a far date",
+      "utterance": "I will pay on the fifteenth of August",
+      "model_disposition": "PTP_TODAY",
+      "model_ptp_date": "2026-08-15",
+      "expected_stage_code": "PTP_FUTURE",
+      "ptp_offset_days": 17
+    },
+    {
+      "id": "G08-tomorrow-mislabelled",
+      "scenario": "Model says TOMORROW but the customer said today",
+      "utterance": "I will pay today",
+      "model_disposition": "PTP_TOMORROW",
+      "model_ptp_date": "today",
+      "expected_stage_code": "PTP_TODAY",
+      "ptp_offset_days": 0
+    },
+    {
+      "id": "G09-stray-date",
+      "scenario": "Non-PTP code arrives with a date attached",
+      "utterance": "I already paid, on the thirtieth of last month",
+      "model_disposition": "ALREADY_PAID",
+      "model_ptp_date": "the thirtieth",
+      "expected_stage_code": "ALREADY_PAID",
+      "ptp_offset_days": null,
+      "note": "The date must be dropped, not stored as a promise."
+    },
+    {
+      "id": "G10-partial",
+      "scenario": "Partial commitment keeps its code",
+      "utterance": "I can only manage five thousand today",
+      "model_disposition": "PTP_PARTIAL",
+      "model_ptp_date": "today",
+      "expected_stage_code": "PTP_PARTIAL",
+      "ptp_offset_days": 0,
+      "note": "PARTIAL is about amount, so it must not be reclassified by date."
+    },
+    {
+      "id": "C01-already-paid-vs-dispute",
+      "scenario": "Plain claim of payment, no contest",
+      "utterance": "I paid it, it should be done",
+      "model_disposition": "ALREADY_PAID",
+      "model_ptp_date": "",
+      "expected_stage_code": "ALREADY_PAID",
+      "ptp_offset_days": null
+    },
+    {
+      "id": "C02-dispute-paid",
+      "scenario": "Claims payment and contests the balance",
+      "utterance": "I already paid, why do you keep saying I owe money",
+      "model_disposition": "DISPUTE_PAID",
+      "model_ptp_date": "",
+      "expected_stage_code": "DISPUTE_PAID",
+      "ptp_offset_days": null
+    },
+    {
+      "id": "C03-wrong-number",
+      "scenario": "Does not know the borrower",
+      "utterance": "there is no Rahul here, wrong number",
+      "model_disposition": "WRONG_NUMBER",
+      "model_ptp_date": "",
+      "expected_stage_code": "WRONG_NUMBER",
+      "ptp_offset_days": null
+    },
+    {
+      "id": "C04-busy-not-callback",
+      "scenario": "Vague \"call later\" is not a callback",
+      "utterance": "I am busy, call me later",
+      "model_disposition": "BUSY",
+      "model_ptp_date": "",
+      "expected_stage_code": "BUSY",
+      "ptp_offset_days": null
+    },
+    {
+      "id": "C05-rnr",
+      "scenario": "Answered but silent",
+      "utterance": "",
+      "model_disposition": "RNR",
+      "model_ptp_date": "",
+      "expected_stage_code": "RNR",
+      "ptp_offset_days": null
+    },
+    {
+      "id": "C06-no-loan",
+      "scenario": "Denies the loan exists",
+      "utterance": "I never took any loan from you people",
+      "model_disposition": "NO_LOAN",
+      "model_ptp_date": "",
+      "expected_stage_code": "NO_LOAN",
+      "ptp_offset_days": null
+    },
+    {
+      "id": "C07-rtp-medical",
+      "scenario": "Medical hardship",
+      "utterance": "I have been in hospital, I cannot manage it",
+      "model_disposition": "RTP_MEDICAL",
+      "model_ptp_date": "",
+      "expected_stage_code": "RTP_MEDICAL",
+      "ptp_offset_days": null
+    },
+    {
+      "id": "C08-voicemail",
+      "scenario": "Voicemail detected",
+      "utterance": "please leave a message after the tone",
+      "model_disposition": "VM",
+      "model_ptp_date": "",
+      "expected_stage_code": "VM",
+      "ptp_offset_days": null
+    }
+  ]
+}
