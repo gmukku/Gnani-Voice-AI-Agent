@@ -51,7 +51,9 @@ NON_CONNECT: frozenset[StageCode] = frozenset(
 #: "Connected" means a real conversation happened -- i.e. anything that is not
 #: a non-connect outcome. Derived rather than hand-listed so that adding a
 #: stage code cannot silently desync the two.
-CONNECTED: frozenset[StageCode] = frozenset(set(StageCode) - NON_CONNECT)
+CONNECTED: frozenset[StageCode] = frozenset(
+    code for code in StageCode if code not in NON_CONNECT
+)
 
 #: Card label -> stage codes. Order is the display order on the dashboard.
 CARD_GROUPS: dict[str, frozenset[StageCode]] = {

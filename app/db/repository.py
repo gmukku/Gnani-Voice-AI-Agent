@@ -87,7 +87,7 @@ class MongoCallRepository:
     def __init__(self, settings: Settings) -> None:
         from pymongo import AsyncMongoClient
 
-        self._client = AsyncMongoClient(
+        self._client: Any = AsyncMongoClient(
             settings.mongo_uri, serverSelectionTimeoutMS=3000
         )
         self._db = self._client[settings.mongo_db]

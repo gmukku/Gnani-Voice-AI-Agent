@@ -23,13 +23,13 @@ import asyncio
 import hashlib
 import json
 import secrets
-from datetime import date, datetime, timezone
+from datetime import date, datetime
 from typing import Any
 from zoneinfo import ZoneInfo
 
 from app.config import Settings, get_settings
 from app.db.repository import CallRepository, utcnow
-from app.models.enums import TERMINAL_STATUSES, CallStatus, Language
+from app.models.enums import TERMINAL_STATUSES, CallStatus
 from app.models.schemas import InitialMessageRequest, PostCallWebhookPayload
 from app.services import disposition as disposition_service
 from app.services.gnani_client import GnaniClient, GnaniError

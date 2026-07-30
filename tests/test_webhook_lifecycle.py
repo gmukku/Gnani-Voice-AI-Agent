@@ -6,7 +6,7 @@ correlation, out-of-order tolerance, and never dropping an unmatched event.
 
 from __future__ import annotations
 
-from datetime import date, datetime, timezone
+from datetime import datetime, timezone
 
 import httpx
 import pytest
