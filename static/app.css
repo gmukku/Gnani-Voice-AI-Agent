@@ -292,8 +292,23 @@ a { color: var(--accent); }
   white-space: nowrap;
 }
 .btn:hover { border-color: var(--accent); color: var(--accent); }
-.btn-primary { background: var(--accent); border-color: var(--accent); color: #fff; }
-.btn-primary:hover { filter: brightness(1.08); color: #fff; }
+/* In dark mode the accent is a light blue, so white text on it is low
+   contrast. Pin the label to the page ground instead of a fixed white. */
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+  font-weight: 600;
+}
+.btn-primary:hover { filter: brightness(1.08); }
+
+@media (prefers-color-scheme: dark) {
+  .btn-primary, .btn-primary:hover { color: var(--bg); }
+}
+:root[data-theme="dark"] .btn-primary,
+:root[data-theme="dark"] .btn-primary:hover { color: var(--bg); }
+:root[data-theme="light"] .btn-primary,
+:root[data-theme="light"] .btn-primary:hover { color: #fff; }
 .btn-sm { font-size: 12.5px; padding: 4px 10px; }
 
 .file-btn { position: relative; overflow: hidden; cursor: pointer; }
@@ -391,6 +406,15 @@ tr.flash { animation: flash 1.6s ease-out; }
 .status-initiated { background: var(--info-soft); color: var(--info); }
 .status-in_progress { background: var(--warn-soft); color: var(--warn); }
 .status-trigger_failed, .status-failed { background: var(--bad-soft); color: var(--bad); }
+
+.origin-console { background: var(--purple-soft); color: var(--purple); }
+.panel-empty {
+  margin: 0;
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: var(--ink-dim);
+  max-width: 60ch;
+}
 
 .stage { font-family: var(--mono); font-size: 10.5px; }
 [class*="stage-ptp"] { background: var(--ok-soft); color: var(--ok); }

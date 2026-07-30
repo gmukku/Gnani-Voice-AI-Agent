@@ -9,11 +9,20 @@
   <div>
     <h1 class="detail-title"><code>{{ call.call_id }}</code></h1>
     <p class="detail-sub">
+      {% if call.customer.customer_name %}
       {{ call.customer.customer_name }} &middot;
       <code>{{ call.customer.phone_number }}</code>
+      {% else %}
+      Initiated from the Gnani console
+      {% endif %}
     </p>
   </div>
   <div class="detail-badges">
+    {% if call.origin == 'gnani_console' %}
+    <span class="tag origin-console" title="Started in the Agents Console, not via the API">
+      CONSOLE
+    </span>
+    {% endif %}
     <span class="tag status-{{ call.call_status | lower }}">{{ call.call_status }}</span>
     {% if call.stage_code %}
     <span class="tag stage stage-{{ call.stage_code | lower }}">{{ call.stage_code }}</span>
@@ -33,18 +42,36 @@
 
 <div class="cols">
 
-  {# --- Section 6.1: customer details ---------------------------------- #}
+  {# --- Section 6.1: customer details ----------------------------------
+       Console-initiated calls carry none of this: the platform does not send
+       customer data for a call it started itself. Say so, rather than showing
+       a panel of blanks and a misleading "0" for the amount. #}
   <section class="panel">
     <h2 class="panel-title">Customer</h2>
+    {% if call.customer.customer_id %}
     <dl class="kv">
       <dt>Customer ID</dt><dd>{{ call.customer.customer_id }}</dd>
       <dt>Name</dt><dd>{{ call.customer.customer_name }}</dd>
       <dt>Phone (masked)</dt><dd><code>{{ call.customer.phone_number }}</code></dd>
       <dt>Loan account</dt><dd>{{ call.customer.loan_account_number }}</dd>
       <dt>EMI amount</dt>
-      <dd>{{ call.emi_details.currency }} {{ '{:,.0f}'.format(call.emi_details.emi_amount or 0) }}</dd>
+      <dd>
+        {% if call.emi_details.emi_amount %}
+        {{ call.emi_details.currency }}
+        {{ '{:,.0f}'.format(call.emi_details.emi_amount) }}
+        {% else %}&mdash;{% endif %}
+      </dd>
       <dt>EMI due date</dt><dd>{{ call.emi_details.emi_due_date | dateonly }}</dd>
     </dl>
+    {% else %}
+    <p class="panel-empty">
+      This call was started in the Agents Console rather than through
+      <code>POST /api/Initial_Message</code>, so no customer record is attached.
+      The console does not send customer details for calls it initiates &mdash;
+      the disposition, transcript and recording below are still the real
+      outcome of the call.
+    </p>
+    {% endif %}
   </section>
 
   {# --- Section 6.1: call metadata + timestamps ------------------------ #}

@@ -21,6 +21,7 @@ stated — the distinction matters, and telephony limits (see
 | Stage-code accuracy on a labelled corpus | **100%** (27/27) |
 | Call recordings captured | 5 |
 | Real webhook payloads captured | 5 |
+| Console and dashboard screenshots | `Screenshots-Console_Dashboard.pdf` |
 
 `ruff` and `mypy` clean across 27 source files.
 
@@ -291,6 +292,22 @@ than a per-case check.
 | Dashboard filters | All seven filter correctly, individually and combined |
 | Phone masking | `*******7373` everywhere; `phone_e164` absent from all API responses |
 | CSV bulk upload | 4 accepted, 1 rejected, per-row errors reported |
+
+---
+
+## A note on the customer panel
+
+All five live calls were started from the Agents Console rather than through
+`POST /api/Initial_Message`, because outbound PSTN never worked (D1). The
+console does not send customer details for a call it initiates, so those records
+carry a disposition, a transcript and a recording but no customer name, phone or
+loan account.
+
+The dashboard states this explicitly on the detail page rather than rendering a
+panel of blanks, and the records are tagged `origin: gnani_console` to
+distinguish them from API-initiated calls. Calls started through the API do
+carry the full customer record — visible by running
+`python -m scripts.seed_scenarios`.
 
 ---
 
