@@ -21,13 +21,14 @@ it is committed alongside this file as `agent_export.json`.
 |---|---|
 | Name | `EMI Payment Collection` |
 | Region | America |
-| Time zone | **Must match `TIMEZONE` in `.env`** — see note below |
+| Time zone | **Eastern** — matches `TIMEZONE=America/New_York` in `.env` |
 | Knowledge base | *None, deliberately* |
 
 **Time zone matters more than it looks.** "Today" and "tomorrow" are resolved
 against it, and the server resolves the same words independently when validating
-the promise-to-pay date. A mismatch puts every PTP date off by a day. Whatever is
-set here must equal `TIMEZONE` in `.env`.
+the promise-to-pay date. A mismatch puts every PTP date off by a day, which is
+why the console setting and `TIMEZONE` in `.env` are both Eastern and must be
+changed together.
 
 **No knowledge base by design.** A KB is for document retrieval; every fact this
 agent needs — name, amount, due date, account last four — arrives as a pre-call
@@ -42,22 +43,28 @@ answering from the wrong source.
 |---|---|---|
 | Provider | **Gnani** | Gnani's ASR is Prisma v2.5 per their documentation. The dropdown shows the provider, not the model name. |
 | Mode | Responsive | Consistent low latency |
-| Allow interruptions | on | See below |
+| Allow interruptions | on, **1 word** | See below |
 | Initial message interruption | **off** | Protects the identity-confirmation opening |
 | Background noise filtering | on, 80 | |
-| Inverse text normalisation | **should be on** | Formats dates, currencies and numbers — exactly what this agent captures |
+| Inverse text normalisation | **on** | Formats dates, currencies and numbers — exactly what this agent captures |
 | Max speech duration | 30s | |
 | Initial silence timeout | 10s | Feeds `RNR` detection |
 | Speech segmentation silence | 0.8s | Consider 1.0s; customers pause while working out a date |
 | DTMF | off | Not required |
 | Custom vocabulary | *optional* | `EMI, instalment, loan account, autopay, due date` reduces mishearing |
 
-**Interruption threshold.** At 1 word, any "um", cough or background noise cuts
-the agent off — including mid-way through the identity disclosure. 2–3 is safer.
+**Interruption threshold is 1 word**, the platform default, and is the one
+setting here left at a value worth questioning. A single word — "um", a cough,
+background noise — cuts the agent off, including part-way through the identity
+disclosure it is required to deliver before saying anything sensitive. 2 or 3
+would make the opening more robust at the cost of feeling slightly less
+responsive to a genuine interruption. Kept at 1 because live testing showed no
+truncated openings; revisit if calls are made from noisier environments.
 
-**Inverse text normalisation is the setting that matters most here.** With it
-off, spoken dates and amounts arrive as raw text, which directly harms PTP
-capture.
+**Inverse text normalisation is on**, and matters more here than on a typical
+agent: it formats dates, currencies and numbers, which is precisely what this
+conversation captures. With it off, spoken dates and amounts arrive as raw text
+and promise-to-pay extraction degrades.
 
 ---
 
@@ -252,8 +259,8 @@ authentication.
 
 ## Rebuilding this agent from scratch
 
-1. Create an agent named `EMI Payment Collection`; set the time zone to match `.env`.
-2. **Transcriber** → Gnani, Responsive. Turn on inverse text normalisation; raise the interruption threshold to 2–3.
+1. Create an agent named `EMI Payment Collection`; set the time zone to **Eastern**, matching `TIMEZONE` in `.env`.
+2. **Transcriber** → Gnani, Responsive. Turn **on** inverse text normalisation.
 3. **LLM Model** → Gnani Evon v2.0, temperature 0.3.
 4. **Voice** → Gnani, Timbre G v1.0, a bilingual voice.
 5. **Languages** → English (US) + Spanish.
