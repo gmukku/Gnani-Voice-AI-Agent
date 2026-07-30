@@ -1,0 +1,17 @@
+# Floors chosen for Python 3.14 wheel availability.
+# pydantic < 2.12 has no cp314 wheel for pydantic-core and its source build
+# fails (PyO3 <= 0.22 supports 3.13 at most), so do not lower these.
+fastapi>=0.121.0
+uvicorn[standard]>=0.38.0
+pydantic>=2.13.0
+pydantic-settings>=2.13.0
+pymongo>=4.16.0
+httpx>=0.28.1
+tenacity>=9.1.0
+structlog>=25.4.0
+jinja2>=3.1.6
+python-multipart>=0.0.20
+python-dateutil>=2.9.0
+# Windows and slim Linux images ship no IANA tz database; zoneinfo needs this
+# or ZoneInfo("America/New_York") raises ZoneInfoNotFoundError.
+tzdata>=2025.1
