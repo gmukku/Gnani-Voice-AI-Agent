@@ -1,0 +1,295 @@
+{
+  "conversation_id": "c5018b6b-0640-4cca-93e5-7a6b2b5d367a",
+  "bot_id": "<redacted>",
+  "bot_language": "en-US",
+  "time_zone": "America/New_York",
+  "bot_type": "voice_outbound",
+  "end_call": false,
+  "language": "English",
+  "user_context": {
+    "preferred_language": "en-US",
+    "emi_due_date_spoken": "30 July 2026",
+    "currency": "INR",
+    "customer_name": "Rahul Sharma",
+    "disclosure_line": "Thank you, Rahul Sharma. Your monthly instalment of 12,500 rupees was due on 30 July 2026.",
+    "loan_last4": "3456",
+    "emi_amount": "12, 500",
+    "lender_name": "ICICI Bank",
+    "currency_word": "Rupees",
+    "current_date_spoken": "29 July 2026"
+  },
+  "tokens_used": 0,
+  "transcript": [
+    {
+      "role": "assistant",
+      "content": "Hello, this is a call regarding your loan account ending in 3456. May I confirm whether I am speaking with Rahul Sharma?",
+      "timestamp": 1785444875.823977
+    },
+    {
+      "role": "user",
+      "content": "uh yes who is this",
+      "timestamp": 1785444894.666629,
+      "total_results": {
+        "en-US": "uh yes who is this"
+      },
+      "detected_language": "english",
+      "user_interruption_flag": false
+    },
+    {
+      "role": "assistant",
+      "content": "I am calling on behalf of I C I C I Bank regarding the loan account ending in 3456 Am I speaking with Rahul Sharma?",
+      "timestamp": 1785444895.007424
+    },
+    {
+      "role": "user",
+      "content": "yes",
+      "timestamp": 1785444910.849263,
+      "total_results": {
+        "en-US": "yes"
+      },
+      "detected_language": "english",
+      "user_interruption_flag": false
+    },
+    {
+      "role": "assistant",
+      "content": "Thank you, Rahul Sharma. Your monthly instalment of 12,500 rupees was due on 30 July 2026 Are you able to clear this pending amount?",
+      "timestamp": 1785444911.243702
+    },
+    {
+      "role": "user",
+      "content": "wait i think i already paid this amount why are you asking me again this is not acceptable you might know that right",
+      "timestamp": 1785444935.122434,
+      "total_results": {
+        "en-US": "wait i think i already paid this amount why are you asking me again this is not acceptable you might know that right"
+      },
+      "detected_language": "english",
+      "user_interruption_flag": false
+    },
+    {
+      "role": "assistant",
+      "content": "I understand. I will note that you have already made this payment for our team to verify.",
+      "timestamp": 1785444935.580349
+    },
+    {
+      "role": "user",
+      "content": "OK",
+      "timestamp": 1785444947.723123,
+      "total_results": {
+        "en-US": "OK"
+      },
+      "detected_language": "english",
+      "user_interruption_flag": false
+    },
+    {
+      "role": "assistant",
+      "content": "Is there anything else I can assist you with today?",
+      "timestamp": 1785444948.030877
+    },
+    {
+      "role": "user",
+      "content": "no",
+      "timestamp": 1785444954.983152,
+      "total_results": {
+        "en-US": "no"
+      },
+      "detected_language": "english",
+      "user_interruption_flag": false
+    },
+    {
+      "role": "assistant",
+      "content": "Thank you for your time. Have a good day.",
+      "timestamp": 1785444955.244292
+    }
+  ],
+  "audio_queue": null,
+  "kb_owner_user_id": null,
+  "bot_name": "EMI Payment Collection-prod-18c30c506b63",
+  "languages": [],
+  "llm_languages": [
+    "english"
+  ],
+  "bot_languages": [
+    "en-US"
+  ],
+  "mapped_bot_languages": [
+    "english"
+  ],
+  "is_tta": false,
+  "user_name": "<redacted>",
+  "preferred_language": "en-US",
+  "emi_due_date_spoken": "30 July 2026",
+  "currency": "INR",
+  "customer_name": "Rahul Sharma",
+  "disclosure_line": "Thank you, Rahul Sharma. Your monthly instalment of 12,500 rupees was due on 30 July 2026.",
+  "loan_last4": "3456",
+  "emi_amount": "12, 500",
+  "lender_name": "ICICI Bank",
+  "currency_word": "Rupees",
+  "current_date_spoken": "29 July 2026",
+  "organization_id": "<redacted>",
+  "actions": {},
+  "call_status": "",
+  "call_sequence_mapping": {},
+  "sequence_number": 0,
+  "answered_seq": 0,
+  "no_answer_seq": 0,
+  "user_id": "<redacted>",
+  "call_type": "test",
+  "environment": "production",
+  "dtmf_signal": "",
+  "disposition_result": {
+    "customer_sentiment": "Frustrated",
+    "language_captured": "English",
+    "disposition_summary": "The identity of the customer was confirmed as Rahul Sharma. The customer stated that they believe they have already paid the EMI and expressed displeasure at being asked again. The call ended with the agent acknowledging the payment claim for verification and the customer having no further queries.",
+    "disposition_reason": "Customer said, \"I think I already paid this amount\" and expressed dissatisfaction with being asked again.",
+    "partial_amount": "",
+    "ptp_date": "",
+    "DISPOSITION": "ALREADY_PAID"
+  },
+  "STAGE_CODE": "ALREADY_PAID",
+  "aura_analytics_enabled": false,
+  "aura_org_id": "",
+  "cross_platform_linked": true,
+  "conversation_log": [
+    {
+      "role": "assistant",
+      "content": "Hello, this is a call regarding your loan account ending in 3456. May I confirm whether I am speaking with Rahul Sharma?",
+      "timestamp": 1785444875.823977
+    },
+    {
+      "role": "user",
+      "content": "uh yes who is this",
+      "timestamp": 1785444894.666629,
+      "total_results": {
+        "en-US": "uh yes who is this"
+      },
+      "detected_language": "english",
+      "user_interruption_flag": false
+    },
+    {
+      "role": "assistant",
+      "content": "I am calling on behalf of I C I C I Bank regarding the loan account ending in 3456 Am I speaking with Rahul Sharma?",
+      "timestamp": 1785444895.007424
+    },
+    {
+      "role": "user",
+      "content": "yes",
+      "timestamp": 1785444910.849263,
+      "total_results": {
+        "en-US": "yes"
+      },
+      "detected_language": "english",
+      "user_interruption_flag": false
+    },
+    {
+      "role": "assistant",
+      "content": "Thank you, Rahul Sharma. Your monthly instalment of 12,500 rupees was due on 30 July 2026 Are you able to clear this pending amount?",
+      "timestamp": 1785444911.243702
+    },
+    {
+      "role": "user",
+      "content": "wait i think i already paid this amount why are you asking me again this is not acceptable you might know that right",
+      "timestamp": 1785444935.122434,
+      "total_results": {
+        "en-US": "wait i think i already paid this amount why are you asking me again this is not acceptable you might know that right"
+      },
+      "detected_language": "english",
+      "user_interruption_flag": false
+    },
+    {
+      "role": "assistant",
+      "content": "I understand. I will note that you have already made this payment for our team to verify.",
+      "timestamp": 1785444935.580349
+    },
+    {
+      "role": "user",
+      "content": "OK",
+      "timestamp": 1785444947.723123,
+      "total_results": {
+        "en-US": "OK"
+      },
+      "detected_language": "english",
+      "user_interruption_flag": false
+    },
+    {
+      "role": "assistant",
+      "content": "Is there anything else I can assist you with today?",
+      "timestamp": 1785444948.030877
+    },
+    {
+      "role": "user",
+      "content": "no",
+      "timestamp": 1785444954.983152,
+      "total_results": {
+        "en-US": "no"
+      },
+      "detected_language": "english",
+      "user_interruption_flag": false
+    },
+    {
+      "role": "assistant",
+      "content": "Thank you for your time. Have a good day.",
+      "timestamp": 1785444955.244292
+    }
+  ],
+  "call_infra": {
+    "call_status": {
+      "customerCRTId": "<redacted>",
+      "ringingTime": "2",
+      "setupTime": "62",
+      "user_id": "<redacted>",
+      "mode": "BOT_TESTING",
+      "callStatus": "NA",
+      "callStartTime": "2026/07/31 02:24:35 +0000",
+      "callConnectedTime": "2026/07/31 02:24:35 +0000",
+      "callEndTime": "2026/07/31 02:26:00 +0000",
+      "srcPhone": "",
+      "dstPhone": "|prod-18c30c506b63;;REDACTED",
+      "callType": "voice",
+      "call_uid": "<redacted>",
+      "flow_id": "prod-18c30c506b63",
+      "gnanivb_cdr_source": "PBX",
+      "gnanivb_hangup_cause_code": "",
+      "gnanivb_hangup_cause_text_tech": "",
+      "gnanivb_hangup_cause_text_ast": "",
+      "gnanivb_dial_status": "",
+      "gnanivb_billing_duration": "",
+      "_id": "",
+      "customerPhone": "",
+      "rec_path": "prod-18c30c506b63/2026_07_31/prod-18c30c506b63-c5018b6b-0640-4cca-93e5-7a6b2b5d367a--2026_07_31-15_09_25"
+    }
+  },
+  "sender_id": "<redacted>",
+  "callConnectedTime": 0,
+  "callStartTime": 0,
+  "customerCRTId": "<redacted>",
+  "callEndTime": 0,
+  "ringingTime": "2",
+  "setupTime": "62",
+  "callStatus": "NA",
+  "srcPhone": "",
+  "dstPhone": "|prod-18c30c506b63;;REDACTED",
+  "callType": "voice",
+  "call_uid": "<redacted>",
+  "flow_id": "prod-18c30c506b63",
+  "gnanivb_cdr_source": "PBX",
+  "gnanivb_hangup_cause_code": "",
+  "gnanivb_hangup_cause_text_tech": "",
+  "gnanivb_hangup_cause_text_ast": "",
+  "gnanivb_dial_status": "",
+  "gnanivb_billing_duration": "",
+  "_id": "",
+  "customerPhone": "",
+  "rec_path": "prod-18c30c506b63/2026_07_31/prod-18c30c506b63-c5018b6b-0640-4cca-93e5-7a6b2b5d367a--2026_07_31-15_09_25",
+  "tempDate": "30/07/2026",
+  "post_call_extraction": "NA",
+  "post_call_extraction_v2": {
+    "customer_sentiment": "Frustrated",
+    "language_captured": "English",
+    "disposition_summary": "The identity of the customer was confirmed as Rahul Sharma. The customer stated that they believe they have already paid the EMI and expressed displeasure at being asked again. The call ended with the agent acknowledging the payment claim for verification and the customer having no further queries.",
+    "disposition_reason": "Customer said, \"I think I already paid this amount\" and expressed dissatisfaction with being asked again.",
+    "partial_amount": "",
+    "ptp_date": "",
+    "DISPOSITION": "ALREADY_PAID"
+  }
+}

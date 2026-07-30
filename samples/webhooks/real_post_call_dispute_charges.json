@@ -1,0 +1,325 @@
+{
+  "conversation_id": "da4f69d6-ec4b-4a3b-9abc-32713ed1ffe0",
+  "bot_id": "<redacted>",
+  "bot_language": "en-US",
+  "time_zone": "America/New_York",
+  "bot_type": "voice_outbound",
+  "end_call": false,
+  "language": "English",
+  "user_context": {
+    "preferred_language": "en-US",
+    "emi_due_date_spoken": "30 July 2026",
+    "currency": "INR",
+    "customer_name": "Rahul Sharma",
+    "disclosure_line": "Thank you, Rahul Sharma. Your monthly instalment of 12,500 rupees was due on 30 July 2026.",
+    "loan_last4": "3456",
+    "emi_amount": "12, 500",
+    "lender_name": "ICICI Bank",
+    "currency_word": "Rupees",
+    "current_date_spoken": "29 July 2026"
+  },
+  "tokens_used": 0,
+  "transcript": [
+    {
+      "role": "assistant",
+      "content": "Hello, this is a call regarding your loan account ending in 3456. May I confirm whether I am speaking with Rahul Sharma?",
+      "timestamp": 1785444729.426922
+    },
+    {
+      "role": "user",
+      "content": "yes",
+      "timestamp": 1785444746.484026,
+      "total_results": {
+        "en-US": "yes"
+      },
+      "detected_language": "english",
+      "user_interruption_flag": false
+    },
+    {
+      "role": "assistant",
+      "content": "Thank you, Rahul Sharma. Your monthly instalment of 12,500 rupees was due on 30 July 2026 Are you able to clear this pending amount?",
+      "timestamp": 1785444746.881111
+    },
+    {
+      "role": "user",
+      "content": "i don't understand your language",
+      "timestamp": 1785444764.556003,
+      "total_results": {
+        "en-US": "i don't understand your language"
+      },
+      "detected_language": "english",
+      "user_interruption_flag": false
+    },
+    {
+      "role": "assistant",
+      "content": "I apologize for the confusion. I was just letting you know that your monthly instalment of twelve thousand five hundred rupees was due yesterday, July thirtieth. Are you able to clear this pending amount?",
+      "timestamp": 1785444764.915147
+    },
+    {
+      "role": "user",
+      "content": "uh i think the amount is wrong i owe less than that",
+      "timestamp": 1785444786.214309,
+      "total_results": {
+        "en-US": "uh i think the amount is wrong i owe less than that"
+      },
+      "detected_language": "english",
+      "user_interruption_flag": false
+    },
+    {
+      "role": "assistant",
+      "content": "I understand. I will note that you are disputing the amount, and a representative will review this for you.",
+      "timestamp": 1785444786.5541
+    },
+    {
+      "role": "user",
+      "content": "i need to pay the twelve thousand five hundred it's a different amount",
+      "timestamp": 1785444792.35532,
+      "total_results": {
+        "en-US": "i need to pay the twelve thousand five hundred it's a different amount"
+      },
+      "detected_language": "english",
+      "user_interruption_flag": true
+    },
+    {
+      "role": "assistant",
+      "content": "I understand. I will note that you are disputing the amount. A representative will review this for you.",
+      "timestamp": 1785444792.686823
+    },
+    {
+      "role": "user",
+      "content": "OK",
+      "timestamp": 1785444804.066754,
+      "total_results": {
+        "en-US": "OK"
+      },
+      "detected_language": "english",
+      "user_interruption_flag": false
+    },
+    {
+      "role": "assistant",
+      "content": "Is there anything else I can help you with today?",
+      "timestamp": 1785444804.371997
+    },
+    {
+      "role": "user",
+      "content": "no thank you",
+      "timestamp": 1785444811.707506,
+      "total_results": {
+        "en-US": "no thank you"
+      },
+      "detected_language": "english",
+      "user_interruption_flag": false
+    },
+    {
+      "role": "assistant",
+      "content": "Thank you for your time. Have a good day.",
+      "timestamp": 1785444811.961695
+    }
+  ],
+  "audio_queue": null,
+  "kb_owner_user_id": null,
+  "bot_name": "EMI Payment Collection-prod-18c30c506b63",
+  "languages": [],
+  "llm_languages": [
+    "english"
+  ],
+  "bot_languages": [
+    "en-US"
+  ],
+  "mapped_bot_languages": [
+    "english"
+  ],
+  "is_tta": false,
+  "user_name": "<redacted>",
+  "preferred_language": "en-US",
+  "emi_due_date_spoken": "30 July 2026",
+  "currency": "INR",
+  "customer_name": "Rahul Sharma",
+  "disclosure_line": "Thank you, Rahul Sharma. Your monthly instalment of 12,500 rupees was due on 30 July 2026.",
+  "loan_last4": "3456",
+  "emi_amount": "12, 500",
+  "lender_name": "ICICI Bank",
+  "currency_word": "Rupees",
+  "current_date_spoken": "29 July 2026",
+  "organization_id": "<redacted>",
+  "actions": {},
+  "call_status": "",
+  "call_sequence_mapping": {},
+  "sequence_number": 0,
+  "answered_seq": 0,
+  "no_answer_seq": 0,
+  "user_id": "<redacted>",
+  "call_type": "test",
+  "environment": "production",
+  "dtmf_signal": "",
+  "disposition_result": {
+    "customer_sentiment": "Neutral",
+    "language_captured": "English",
+    "disposition_summary": "The customer's identity was confirmed. The customer disputed the loan instalment amount but acknowledged a need to pay 12,500 rupees. The call ended with the customer agreeing to the agent's note of a dispute being reviewed and no further issues raised.",
+    "disposition_reason": "The customer stated, \"i think the amount is wrong i owe less than that\" and later said, \"i need to pay the twelve thousand five hundred it's a different amount.\"",
+    "partial_amount": "",
+    "ptp_date": "",
+    "DISPOSITION": "DISPUTE_CHARGES"
+  },
+  "STAGE_CODE": "DISPUTE_CHARGES",
+  "aura_analytics_enabled": false,
+  "aura_org_id": "",
+  "cross_platform_linked": true,
+  "conversation_log": [
+    {
+      "role": "assistant",
+      "content": "Hello, this is a call regarding your loan account ending in 3456. May I confirm whether I am speaking with Rahul Sharma?",
+      "timestamp": 1785444729.426922
+    },
+    {
+      "role": "user",
+      "content": "yes",
+      "timestamp": 1785444746.484026,
+      "total_results": {
+        "en-US": "yes"
+      },
+      "detected_language": "english",
+      "user_interruption_flag": false
+    },
+    {
+      "role": "assistant",
+      "content": "Thank you, Rahul Sharma. Your monthly instalment of 12,500 rupees was due on 30 July 2026 Are you able to clear this pending amount?",
+      "timestamp": 1785444746.881111
+    },
+    {
+      "role": "user",
+      "content": "i don't understand your language",
+      "timestamp": 1785444764.556003,
+      "total_results": {
+        "en-US": "i don't understand your language"
+      },
+      "detected_language": "english",
+      "user_interruption_flag": false
+    },
+    {
+      "role": "assistant",
+      "content": "I apologize for the confusion. I was just letting you know that your monthly instalment of twelve thousand five hundred rupees was due yesterday, July thirtieth. Are you able to clear this pending amount?",
+      "timestamp": 1785444764.915147
+    },
+    {
+      "role": "user",
+      "content": "uh i think the amount is wrong i owe less than that",
+      "timestamp": 1785444786.214309,
+      "total_results": {
+        "en-US": "uh i think the amount is wrong i owe less than that"
+      },
+      "detected_language": "english",
+      "user_interruption_flag": false
+    },
+    {
+      "role": "assistant",
+      "content": "I understand. I will note that you are disputing the amount, and a representative will review this for you.",
+      "timestamp": 1785444786.5541
+    },
+    {
+      "role": "user",
+      "content": "i need to pay the twelve thousand five hundred it's a different amount",
+      "timestamp": 1785444792.35532,
+      "total_results": {
+        "en-US": "i need to pay the twelve thousand five hundred it's a different amount"
+      },
+      "detected_language": "english",
+      "user_interruption_flag": true
+    },
+    {
+      "role": "assistant",
+      "content": "I understand. I will note that you are disputing the amount. A representative will review this for you.",
+      "timestamp": 1785444792.686823
+    },
+    {
+      "role": "user",
+      "content": "OK",
+      "timestamp": 1785444804.066754,
+      "total_results": {
+        "en-US": "OK"
+      },
+      "detected_language": "english",
+      "user_interruption_flag": false
+    },
+    {
+      "role": "assistant",
+      "content": "Is there anything else I can help you with today?",
+      "timestamp": 1785444804.371997
+    },
+    {
+      "role": "user",
+      "content": "no thank you",
+      "timestamp": 1785444811.707506,
+      "total_results": {
+        "en-US": "no thank you"
+      },
+      "detected_language": "english",
+      "user_interruption_flag": false
+    },
+    {
+      "role": "assistant",
+      "content": "Thank you for your time. Have a good day.",
+      "timestamp": 1785444811.961695
+    }
+  ],
+  "call_infra": {
+    "call_status": {
+      "customerCRTId": "<redacted>",
+      "ringingTime": "2",
+      "setupTime": "62",
+      "user_id": "<redacted>",
+      "mode": "BOT_TESTING",
+      "callStatus": "NA",
+      "callStartTime": "2026/07/31 02:22:09 +0000",
+      "callConnectedTime": "2026/07/31 02:22:09 +0000",
+      "callEndTime": "2026/07/31 02:23:36 +0000",
+      "srcPhone": "",
+      "dstPhone": "|prod-18c30c506b63;;REDACTED",
+      "callType": "voice",
+      "call_uid": "<redacted>",
+      "flow_id": "prod-18c30c506b63",
+      "gnanivb_cdr_source": "PBX",
+      "gnanivb_hangup_cause_code": "",
+      "gnanivb_hangup_cause_text_tech": "",
+      "gnanivb_hangup_cause_text_ast": "",
+      "gnanivb_dial_status": "",
+      "gnanivb_billing_duration": "",
+      "_id": "",
+      "customerPhone": "",
+      "rec_path": "prod-18c30c506b63/2026_07_31/prod-18c30c506b63-da4f69d6-ec4b-4a3b-9abc-32713ed1ffe0--2026_07_31-15_09_25"
+    }
+  },
+  "sender_id": "<redacted>",
+  "callConnectedTime": 0,
+  "callStartTime": 0,
+  "customerCRTId": "<redacted>",
+  "callEndTime": 0,
+  "ringingTime": "2",
+  "setupTime": "62",
+  "callStatus": "NA",
+  "srcPhone": "",
+  "dstPhone": "|prod-18c30c506b63;;REDACTED",
+  "callType": "voice",
+  "call_uid": "<redacted>",
+  "flow_id": "prod-18c30c506b63",
+  "gnanivb_cdr_source": "PBX",
+  "gnanivb_hangup_cause_code": "",
+  "gnanivb_hangup_cause_text_tech": "",
+  "gnanivb_hangup_cause_text_ast": "",
+  "gnanivb_dial_status": "",
+  "gnanivb_billing_duration": "",
+  "_id": "",
+  "customerPhone": "",
+  "rec_path": "prod-18c30c506b63/2026_07_31/prod-18c30c506b63-da4f69d6-ec4b-4a3b-9abc-32713ed1ffe0--2026_07_31-15_09_25",
+  "tempDate": "30/07/2026",
+  "post_call_extraction": "NA",
+  "post_call_extraction_v2": {
+    "customer_sentiment": "Neutral",
+    "language_captured": "English",
+    "disposition_summary": "The customer's identity was confirmed. The customer disputed the loan instalment amount but acknowledged a need to pay 12,500 rupees. The call ended with the customer agreeing to the agent's note of a dispute being reviewed and no further issues raised.",
+    "disposition_reason": "The customer stated, \"i think the amount is wrong i owe less than that\" and later said, \"i need to pay the twelve thousand five hundred it's a different amount.\"",
+    "partial_amount": "",
+    "ptp_date": "",
+    "DISPOSITION": "DISPUTE_CHARGES"
+  }
+}

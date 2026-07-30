@@ -1,0 +1,385 @@
+{
+  "conversation_id": "f388ca33-ee71-4549-85b1-439801e1719a",
+  "bot_id": "<redacted>",
+  "bot_language": "en-US",
+  "time_zone": "America/New_York",
+  "bot_type": "voice_outbound",
+  "end_call": false,
+  "language": "English",
+  "user_context": {
+    "preferred_language": "en-US",
+    "emi_due_date_spoken": "30 July 2026",
+    "currency": "INR",
+    "customer_name": "Rahul Sharma",
+    "disclosure_line": "Thank you, Rahul Sharma. Your monthly instalment of 12,500 rupees was due on 30 July 2026.",
+    "loan_last4": "3456",
+    "emi_amount": "12, 500",
+    "lender_name": "ICICI Bank",
+    "currency_word": "Rupees",
+    "current_date_spoken": "29 July 2026"
+  },
+  "tokens_used": 0,
+  "transcript": [
+    {
+      "role": "assistant",
+      "content": "Hello, this is a call regarding your loan account ending in 3456. May I confirm whether I am speaking with Rahul Sharma?",
+      "timestamp": 1785436832.745916
+    },
+    {
+      "role": "user",
+      "content": "yes you are speaking with rahul sharma",
+      "timestamp": 1785436849.813511,
+      "total_results": {
+        "en-US": "yes you are speaking with rahul sharma"
+      },
+      "detected_language": "english",
+      "user_interruption_flag": false
+    },
+    {
+      "role": "assistant",
+      "content": "Thank you, Rahul Sharma. Your monthly instalment of 12,500 rupees was due on 30 July 2026 Are you able to clear this pending amount?",
+      "timestamp": 1785436850.245507
+    },
+    {
+      "role": "user",
+      "content": "uh i'm not understanding your language i speak english",
+      "timestamp": 1785436868.984573,
+      "total_results": {
+        "en-US": "uh i'm not understanding your language i speak english"
+      },
+      "detected_language": "english",
+      "user_interruption_flag": false
+    },
+    {
+      "role": "assistant",
+      "content": "I apologize for the confusion. I am speaking in English. To clarify, Your monthly instalment of twelve thousand five hundred rupees was due yesterday, July thirtieth. Are you able to clear this pending amount?",
+      "timestamp": 1785436869.402639
+    },
+    {
+      "role": "user",
+      "content": "is july thirtieth yesterday or today",
+      "timestamp": 1785436889.027815,
+      "total_results": {
+        "en-US": "is july thirtieth yesterday or today"
+      },
+      "detected_language": "english",
+      "user_interruption_flag": false
+    },
+    {
+      "role": "assistant",
+      "content": "Today is Friday, July thirty-first, So the payment was due yesterday, July thirtieth. Are you able to clear the pending amount?",
+      "timestamp": 1785436889.439782
+    },
+    {
+      "role": "user",
+      "content": "umm no can you give me a discount",
+      "timestamp": 1785436905.718934,
+      "total_results": {
+        "en-US": "umm no can you give me a discount"
+      },
+      "detected_language": "english",
+      "user_interruption_flag": false
+    },
+    {
+      "role": "assistant",
+      "content": "I cannot offer any discounts or waivers. A representative will review your request, but for now, are you able to make the payment?",
+      "timestamp": 1785436906.145837
+    },
+    {
+      "role": "user",
+      "content": "i'm in a financial difficulty",
+      "timestamp": 1785436921.624058,
+      "total_results": {
+        "en-US": "i'm in a financial difficulty"
+      },
+      "detected_language": "english",
+      "user_interruption_flag": false
+    },
+    {
+      "role": "assistant",
+      "content": "I understand. I'll make a note that you are facing financial difficulties. When do you think you will be able to make the payment?",
+      "timestamp": 1785436922.026846
+    },
+    {
+      "role": "user",
+      "content": "umm and i is it possible to pay on fifth august",
+      "timestamp": 1785436928.651041,
+      "total_results": {
+        "en-US": "umm and i is it possible to pay on fifth august"
+      },
+      "detected_language": "english",
+      "user_interruption_flag": true
+    },
+    {
+      "role": "assistant",
+      "content": "I understand you're facing some financial difficulties. I have noted that you would like to pay on Wednesday, August fifth. Is that correct?",
+      "timestamp": 1785436929.029785
+    },
+    {
+      "role": "user",
+      "content": "uh yes",
+      "timestamp": 1785436943.42524,
+      "total_results": {
+        "en-US": "uh yes"
+      },
+      "detected_language": "english",
+      "user_interruption_flag": false
+    },
+    {
+      "role": "assistant",
+      "content": "So, I'll note that you will pay the monthly instalment of twelve thousand five hundred rupees on Wednesday, August fifth. Is that correct?",
+      "timestamp": 1785436943.78758
+    },
+    {
+      "role": "user",
+      "content": "yes",
+      "timestamp": 1785436953.586632,
+      "total_results": {
+        "en-US": "yes"
+      },
+      "detected_language": "english",
+      "user_interruption_flag": false
+    },
+    {
+      "role": "assistant",
+      "content": "Thank you for your time. Have a good day.",
+      "timestamp": 1785436953.899581
+    }
+  ],
+  "audio_queue": null,
+  "kb_owner_user_id": null,
+  "bot_name": "EMI Payment Collection-prod-18c30c506b63",
+  "languages": [],
+  "llm_languages": [
+    "english"
+  ],
+  "bot_languages": [
+    "en-US"
+  ],
+  "mapped_bot_languages": [
+    "english"
+  ],
+  "is_tta": false,
+  "user_name": "<redacted>",
+  "preferred_language": "en-US",
+  "emi_due_date_spoken": "30 July 2026",
+  "currency": "INR",
+  "customer_name": "Rahul Sharma",
+  "disclosure_line": "Thank you, Rahul Sharma. Your monthly instalment of 12,500 rupees was due on 30 July 2026.",
+  "loan_last4": "3456",
+  "emi_amount": "12, 500",
+  "lender_name": "ICICI Bank",
+  "currency_word": "Rupees",
+  "current_date_spoken": "29 July 2026",
+  "organization_id": "<redacted>",
+  "actions": {},
+  "call_status": "",
+  "call_sequence_mapping": {},
+  "sequence_number": 0,
+  "answered_seq": 0,
+  "no_answer_seq": 0,
+  "user_id": "<redacted>",
+  "call_type": "test",
+  "environment": "production",
+  "dtmf_signal": "",
+  "disposition_result": {
+    "customer_sentiment": "Cooperative",
+    "language_captured": "English",
+    "disposition_summary": "The customer's identity was confirmed as Rahul Sharma. The customer stated they are in financial difficulty and committed to paying the full instalment amount on August 5, 2026. The call ended with the customer confirming the payment date.",
+    "disposition_reason": "The customer said, \"is it possible to pay on fifth august\" and confirmed with \"yes\" when the payment date was read back.",
+    "partial_amount": "",
+    "ptp_date": "2026-08-05",
+    "DISPOSITION": "PTP_FUTURE"
+  },
+  "STAGE_CODE": "PTP_FUTURE",
+  "aura_analytics_enabled": false,
+  "aura_org_id": "",
+  "cross_platform_linked": true,
+  "conversation_log": [
+    {
+      "role": "assistant",
+      "content": "Hello, this is a call regarding your loan account ending in 3456. May I confirm whether I am speaking with Rahul Sharma?",
+      "timestamp": 1785436832.745916
+    },
+    {
+      "role": "user",
+      "content": "yes you are speaking with rahul sharma",
+      "timestamp": 1785436849.813511,
+      "total_results": {
+        "en-US": "yes you are speaking with rahul sharma"
+      },
+      "detected_language": "english",
+      "user_interruption_flag": false
+    },
+    {
+      "role": "assistant",
+      "content": "Thank you, Rahul Sharma. Your monthly instalment of 12,500 rupees was due on 30 July 2026 Are you able to clear this pending amount?",
+      "timestamp": 1785436850.245507
+    },
+    {
+      "role": "user",
+      "content": "uh i'm not understanding your language i speak english",
+      "timestamp": 1785436868.984573,
+      "total_results": {
+        "en-US": "uh i'm not understanding your language i speak english"
+      },
+      "detected_language": "english",
+      "user_interruption_flag": false
+    },
+    {
+      "role": "assistant",
+      "content": "I apologize for the confusion. I am speaking in English. To clarify, Your monthly instalment of twelve thousand five hundred rupees was due yesterday, July thirtieth. Are you able to clear this pending amount?",
+      "timestamp": 1785436869.402639
+    },
+    {
+      "role": "user",
+      "content": "is july thirtieth yesterday or today",
+      "timestamp": 1785436889.027815,
+      "total_results": {
+        "en-US": "is july thirtieth yesterday or today"
+      },
+      "detected_language": "english",
+      "user_interruption_flag": false
+    },
+    {
+      "role": "assistant",
+      "content": "Today is Friday, July thirty-first, So the payment was due yesterday, July thirtieth. Are you able to clear the pending amount?",
+      "timestamp": 1785436889.439782
+    },
+    {
+      "role": "user",
+      "content": "umm no can you give me a discount",
+      "timestamp": 1785436905.718934,
+      "total_results": {
+        "en-US": "umm no can you give me a discount"
+      },
+      "detected_language": "english",
+      "user_interruption_flag": false
+    },
+    {
+      "role": "assistant",
+      "content": "I cannot offer any discounts or waivers. A representative will review your request, but for now, are you able to make the payment?",
+      "timestamp": 1785436906.145837
+    },
+    {
+      "role": "user",
+      "content": "i'm in a financial difficulty",
+      "timestamp": 1785436921.624058,
+      "total_results": {
+        "en-US": "i'm in a financial difficulty"
+      },
+      "detected_language": "english",
+      "user_interruption_flag": false
+    },
+    {
+      "role": "assistant",
+      "content": "I understand. I'll make a note that you are facing financial difficulties. When do you think you will be able to make the payment?",
+      "timestamp": 1785436922.026846
+    },
+    {
+      "role": "user",
+      "content": "umm and i is it possible to pay on fifth august",
+      "timestamp": 1785436928.651041,
+      "total_results": {
+        "en-US": "umm and i is it possible to pay on fifth august"
+      },
+      "detected_language": "english",
+      "user_interruption_flag": true
+    },
+    {
+      "role": "assistant",
+      "content": "I understand you're facing some financial difficulties. I have noted that you would like to pay on Wednesday, August fifth. Is that correct?",
+      "timestamp": 1785436929.029785
+    },
+    {
+      "role": "user",
+      "content": "uh yes",
+      "timestamp": 1785436943.42524,
+      "total_results": {
+        "en-US": "uh yes"
+      },
+      "detected_language": "english",
+      "user_interruption_flag": false
+    },
+    {
+      "role": "assistant",
+      "content": "So, I'll note that you will pay the monthly instalment of twelve thousand five hundred rupees on Wednesday, August fifth. Is that correct?",
+      "timestamp": 1785436943.78758
+    },
+    {
+      "role": "user",
+      "content": "yes",
+      "timestamp": 1785436953.586632,
+      "total_results": {
+        "en-US": "yes"
+      },
+      "detected_language": "english",
+      "user_interruption_flag": false
+    },
+    {
+      "role": "assistant",
+      "content": "Thank you for your time. Have a good day.",
+      "timestamp": 1785436953.899581
+    }
+  ],
+  "call_infra": {
+    "call_status": {
+      "customerCRTId": "<redacted>",
+      "ringingTime": "2",
+      "setupTime": "62",
+      "user_id": "<redacted>",
+      "mode": "BOT_TESTING",
+      "callStatus": "NA",
+      "callStartTime": "2026/07/31 00:10:32 +0000",
+      "callConnectedTime": "2026/07/31 00:10:32 +0000",
+      "callEndTime": "2026/07/31 00:12:38 +0000",
+      "srcPhone": "",
+      "dstPhone": "|prod-18c30c506b63;;REDACTED",
+      "callType": "voice",
+      "call_uid": "<redacted>",
+      "flow_id": "prod-18c30c506b63",
+      "gnanivb_cdr_source": "PBX",
+      "gnanivb_hangup_cause_code": "",
+      "gnanivb_hangup_cause_text_tech": "",
+      "gnanivb_hangup_cause_text_ast": "",
+      "gnanivb_dial_status": "",
+      "gnanivb_billing_duration": "",
+      "_id": "",
+      "customerPhone": "",
+      "rec_path": "prod-18c30c506b63/2026_07_31/prod-18c30c506b63-f388ca33-ee71-4549-85b1-439801e1719a--2026_07_31-15_09_25"
+    }
+  },
+  "sender_id": "<redacted>",
+  "callConnectedTime": 0,
+  "callStartTime": 0,
+  "customerCRTId": "<redacted>",
+  "callEndTime": 0,
+  "ringingTime": "2",
+  "setupTime": "62",
+  "callStatus": "NA",
+  "srcPhone": "",
+  "dstPhone": "|prod-18c30c506b63;;REDACTED",
+  "callType": "voice",
+  "call_uid": "<redacted>",
+  "flow_id": "prod-18c30c506b63",
+  "gnanivb_cdr_source": "PBX",
+  "gnanivb_hangup_cause_code": "",
+  "gnanivb_hangup_cause_text_tech": "",
+  "gnanivb_hangup_cause_text_ast": "",
+  "gnanivb_dial_status": "",
+  "gnanivb_billing_duration": "",
+  "_id": "",
+  "customerPhone": "",
+  "rec_path": "prod-18c30c506b63/2026_07_31/prod-18c30c506b63-f388ca33-ee71-4549-85b1-439801e1719a--2026_07_31-15_09_25",
+  "tempDate": "30/07/2026",
+  "post_call_extraction": "NA",
+  "post_call_extraction_v2": {
+    "customer_sentiment": "Cooperative",
+    "language_captured": "English",
+    "disposition_summary": "The customer's identity was confirmed as Rahul Sharma. The customer stated they are in financial difficulty and committed to paying the full instalment amount on August 5, 2026. The call ended with the customer confirming the payment date.",
+    "disposition_reason": "The customer said, \"is it possible to pay on fifth august\" and confirmed with \"yes\" when the payment date was read back.",
+    "partial_amount": "",
+    "ptp_date": "2026-08-05",
+    "DISPOSITION": "PTP_FUTURE"
+  }
+}

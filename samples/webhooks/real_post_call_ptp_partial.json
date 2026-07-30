@@ -1,0 +1,295 @@
+{
+  "conversation_id": "63eb54b0-eb3d-4c0c-bddd-8db801790b5e",
+  "bot_id": "<redacted>",
+  "bot_language": "en-US",
+  "time_zone": "America/New_York",
+  "bot_type": "voice_outbound",
+  "end_call": false,
+  "language": "English",
+  "user_context": {
+    "preferred_language": "en-US",
+    "emi_due_date_spoken": "30 July 2026",
+    "currency": "INR",
+    "customer_name": "Rahul Sharma",
+    "disclosure_line": "Thank you, Rahul Sharma. Your monthly instalment of 12,500 rupees was due on 30 July 2026.",
+    "loan_last4": "3456",
+    "emi_amount": "12, 500",
+    "lender_name": "ICICI Bank",
+    "currency_word": "Rupees",
+    "current_date_spoken": "29 July 2026"
+  },
+  "tokens_used": 0,
+  "transcript": [
+    {
+      "role": "assistant",
+      "content": "Hello, this is a call regarding your loan account ending in 3456. May I confirm whether I am speaking with Rahul Sharma?",
+      "timestamp": 1785444427.731472
+    },
+    {
+      "role": "user",
+      "content": "uh yes",
+      "timestamp": 1785444442.936589,
+      "total_results": {
+        "en-US": "uh yes"
+      },
+      "detected_language": "english",
+      "user_interruption_flag": false
+    },
+    {
+      "role": "assistant",
+      "content": "Thank you, Rahul Sharma. Your monthly instalment of 12,500 rupees was due on 30 July 2026 Are you able to clear this pending amount?",
+      "timestamp": 1785444443.336644
+    },
+    {
+      "role": "user",
+      "content": "uh i can only manage five thousand right now i'll pay the rest tomorrow",
+      "timestamp": 1785444467.895322,
+      "total_results": {
+        "en-US": "uh i can only manage five thousand right now i'll pay the rest tomorrow"
+      },
+      "detected_language": "english",
+      "user_interruption_flag": false
+    },
+    {
+      "role": "assistant",
+      "content": "I understand. You can pay five thousand rupees now and the rest tomorrow. Just to be sure, what is the specific date you will pay the remaining amount?",
+      "timestamp": 1785444468.1917
+    },
+    {
+      "role": "user",
+      "content": "OK",
+      "timestamp": 1785444484.339233,
+      "total_results": {
+        "en-US": "OK"
+      },
+      "detected_language": "english",
+      "user_interruption_flag": false
+    },
+    {
+      "role": "assistant",
+      "content": "I'm sorry, I didn't quite catch that. Could you please tell me the specific date you will pay the rest of the amount?",
+      "timestamp": 1785444484.819072
+    },
+    {
+      "role": "user",
+      "content": "uh second august",
+      "timestamp": 1785444495.921069,
+      "total_results": {
+        "en-US": "uh second august"
+      },
+      "detected_language": "english",
+      "user_interruption_flag": false
+    },
+    {
+      "role": "assistant",
+      "content": "I see. So, you will pay five thousand rupees now and the remaining amount on Sunday, the second of August. Is that correct?",
+      "timestamp": 1785444496.314038
+    },
+    {
+      "role": "user",
+      "content": "yes",
+      "timestamp": 1785444509.383997,
+      "total_results": {
+        "en-US": "yes"
+      },
+      "detected_language": "english",
+      "user_interruption_flag": false
+    },
+    {
+      "role": "assistant",
+      "content": "Thank you for confirming. I have noted that down. Thank you for your time. Have a good day.",
+      "timestamp": 1785444509.691268
+    }
+  ],
+  "audio_queue": null,
+  "kb_owner_user_id": null,
+  "bot_name": "EMI Payment Collection-prod-18c30c506b63",
+  "languages": [],
+  "llm_languages": [
+    "english"
+  ],
+  "bot_languages": [
+    "en-US"
+  ],
+  "mapped_bot_languages": [
+    "english"
+  ],
+  "is_tta": false,
+  "user_name": "<redacted>",
+  "preferred_language": "en-US",
+  "emi_due_date_spoken": "30 July 2026",
+  "currency": "INR",
+  "customer_name": "Rahul Sharma",
+  "disclosure_line": "Thank you, Rahul Sharma. Your monthly instalment of 12,500 rupees was due on 30 July 2026.",
+  "loan_last4": "3456",
+  "emi_amount": "12, 500",
+  "lender_name": "ICICI Bank",
+  "currency_word": "Rupees",
+  "current_date_spoken": "29 July 2026",
+  "organization_id": "<redacted>",
+  "actions": {},
+  "call_status": "",
+  "call_sequence_mapping": {},
+  "sequence_number": 0,
+  "answered_seq": 0,
+  "no_answer_seq": 0,
+  "user_id": "<redacted>",
+  "call_type": "test",
+  "environment": "production",
+  "dtmf_signal": "",
+  "disposition_result": {
+    "customer_sentiment": "Cooperative",
+    "language_captured": "English",
+    "disposition_summary": "The customer confirmed their identity as Rahul Sharma. They stated they could pay 5000 rupees immediately and commit to paying the rest on August 2nd. The call ended with the customer confirming the payment plan.",
+    "disposition_reason": "The customer said, \"I can only manage five thousand right now i'll pay the rest tomorrow\" and later confirmed paying the remaining amount on \"second august.\"",
+    "partial_amount": "5000",
+    "ptp_date": "2026-08-02",
+    "DISPOSITION": "PTP_PARTIAL"
+  },
+  "STAGE_CODE": "PTP_PARTIAL",
+  "aura_analytics_enabled": false,
+  "aura_org_id": "",
+  "cross_platform_linked": true,
+  "conversation_log": [
+    {
+      "role": "assistant",
+      "content": "Hello, this is a call regarding your loan account ending in 3456. May I confirm whether I am speaking with Rahul Sharma?",
+      "timestamp": 1785444427.731472
+    },
+    {
+      "role": "user",
+      "content": "uh yes",
+      "timestamp": 1785444442.936589,
+      "total_results": {
+        "en-US": "uh yes"
+      },
+      "detected_language": "english",
+      "user_interruption_flag": false
+    },
+    {
+      "role": "assistant",
+      "content": "Thank you, Rahul Sharma. Your monthly instalment of 12,500 rupees was due on 30 July 2026 Are you able to clear this pending amount?",
+      "timestamp": 1785444443.336644
+    },
+    {
+      "role": "user",
+      "content": "uh i can only manage five thousand right now i'll pay the rest tomorrow",
+      "timestamp": 1785444467.895322,
+      "total_results": {
+        "en-US": "uh i can only manage five thousand right now i'll pay the rest tomorrow"
+      },
+      "detected_language": "english",
+      "user_interruption_flag": false
+    },
+    {
+      "role": "assistant",
+      "content": "I understand. You can pay five thousand rupees now and the rest tomorrow. Just to be sure, what is the specific date you will pay the remaining amount?",
+      "timestamp": 1785444468.1917
+    },
+    {
+      "role": "user",
+      "content": "OK",
+      "timestamp": 1785444484.339233,
+      "total_results": {
+        "en-US": "OK"
+      },
+      "detected_language": "english",
+      "user_interruption_flag": false
+    },
+    {
+      "role": "assistant",
+      "content": "I'm sorry, I didn't quite catch that. Could you please tell me the specific date you will pay the rest of the amount?",
+      "timestamp": 1785444484.819072
+    },
+    {
+      "role": "user",
+      "content": "uh second august",
+      "timestamp": 1785444495.921069,
+      "total_results": {
+        "en-US": "uh second august"
+      },
+      "detected_language": "english",
+      "user_interruption_flag": false
+    },
+    {
+      "role": "assistant",
+      "content": "I see. So, you will pay five thousand rupees now and the remaining amount on Sunday, the second of August. Is that correct?",
+      "timestamp": 1785444496.314038
+    },
+    {
+      "role": "user",
+      "content": "yes",
+      "timestamp": 1785444509.383997,
+      "total_results": {
+        "en-US": "yes"
+      },
+      "detected_language": "english",
+      "user_interruption_flag": false
+    },
+    {
+      "role": "assistant",
+      "content": "Thank you for confirming. I have noted that down. Thank you for your time. Have a good day.",
+      "timestamp": 1785444509.691268
+    }
+  ],
+  "call_infra": {
+    "call_status": {
+      "customerCRTId": "<redacted>",
+      "ringingTime": "2",
+      "setupTime": "62",
+      "user_id": "<redacted>",
+      "mode": "BOT_TESTING",
+      "callStatus": "NA",
+      "callStartTime": "2026/07/31 02:17:07 +0000",
+      "callConnectedTime": "2026/07/31 02:17:07 +0000",
+      "callEndTime": "2026/07/31 02:18:37 +0000",
+      "srcPhone": "",
+      "dstPhone": "|prod-18c30c506b63;;REDACTED",
+      "callType": "voice",
+      "call_uid": "<redacted>",
+      "flow_id": "prod-18c30c506b63",
+      "gnanivb_cdr_source": "PBX",
+      "gnanivb_hangup_cause_code": "",
+      "gnanivb_hangup_cause_text_tech": "",
+      "gnanivb_hangup_cause_text_ast": "",
+      "gnanivb_dial_status": "",
+      "gnanivb_billing_duration": "",
+      "_id": "",
+      "customerPhone": "",
+      "rec_path": "prod-18c30c506b63/2026_07_31/prod-18c30c506b63-63eb54b0-eb3d-4c0c-bddd-8db801790b5e--2026_07_31-15_09_25"
+    }
+  },
+  "sender_id": "<redacted>",
+  "callConnectedTime": 0,
+  "callStartTime": 0,
+  "customerCRTId": "<redacted>",
+  "callEndTime": 0,
+  "ringingTime": "2",
+  "setupTime": "62",
+  "callStatus": "NA",
+  "srcPhone": "",
+  "dstPhone": "|prod-18c30c506b63;;REDACTED",
+  "callType": "voice",
+  "call_uid": "<redacted>",
+  "flow_id": "prod-18c30c506b63",
+  "gnanivb_cdr_source": "PBX",
+  "gnanivb_hangup_cause_code": "",
+  "gnanivb_hangup_cause_text_tech": "",
+  "gnanivb_hangup_cause_text_ast": "",
+  "gnanivb_dial_status": "",
+  "gnanivb_billing_duration": "",
+  "_id": "",
+  "customerPhone": "",
+  "rec_path": "prod-18c30c506b63/2026_07_31/prod-18c30c506b63-63eb54b0-eb3d-4c0c-bddd-8db801790b5e--2026_07_31-15_09_25",
+  "tempDate": "30/07/2026",
+  "post_call_extraction": "NA",
+  "post_call_extraction_v2": {
+    "customer_sentiment": "Cooperative",
+    "language_captured": "English",
+    "disposition_summary": "The customer confirmed their identity as Rahul Sharma. They stated they could pay 5000 rupees immediately and commit to paying the rest on August 2nd. The call ended with the customer confirming the payment plan.",
+    "disposition_reason": "The customer said, \"I can only manage five thousand right now i'll pay the rest tomorrow\" and later confirmed paying the remaining amount on \"second august.\"",
+    "partial_amount": "5000",
+    "ptp_date": "2026-08-02",
+    "DISPOSITION": "PTP_PARTIAL"
+  }
+}
