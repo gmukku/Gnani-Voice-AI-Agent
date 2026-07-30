@@ -28,6 +28,12 @@ log = get_logger(__name__)
 
 router = APIRouter(prefix="/api/v1/webhooks", tags=["webhooks"])
 
+#: Short alias for the same handler. The Agents Console rejects some URLs at
+#: its own validation step, and a quick-tunnel hostname is already ~60
+#: characters before the path -- so `/hook` keeps the total well under any
+#: length limit. Same auth, same behaviour.
+alias_router = APIRouter(tags=["webhooks"])
+
 
 # The handler reads the raw body rather than binding a Pydantic model, so
 # FastAPI cannot derive a request schema. Declaring it explicitly keeps the
@@ -169,3 +175,19 @@ async def post_call(
         return WebhookAck(status="unmatched", detail=str(exc))
 
     return WebhookAck(status=result["status"], call_id=result.get("call_id"))
+
+
+@alias_router.post(
+    "/hook",
+    response_model=WebhookAck,
+    dependencies=[Depends(require_webhook_key)],
+    summary="Short alias for /api/v1/webhooks/post-call",
+    openapi_extra={"requestBody": _POST_CALL_REQUEST_SCHEMA},
+)
+async def post_call_alias(
+    request: Request,
+    response: Response,
+    service: CallService = Depends(get_call_service),
+) -> WebhookAck:
+    """Identical to the canonical endpoint; exists only to keep the URL short."""
+    return await post_call(request, response, service)

@@ -165,6 +165,7 @@ def create_app() -> FastAPI:
     app.include_router(calls.router)
     app.include_router(gnani.router)
     app.include_router(webhooks.router)
+    app.include_router(webhooks.alias_router)
     app.include_router(dashboard.router)
 
     @app.websocket("/ws/calls")

@@ -14,7 +14,7 @@ the other two are ours to define.
 from __future__ import annotations
 
 import re
-from datetime import date, datetime
+from datetime import date, datetime, timezone
 from typing import Annotated, Any
 
 from pydantic import (
@@ -30,6 +30,16 @@ from app.models.enums import CallStatus, Language, StageCode
 from app.utils.masking import mask_account, mask_phone
 
 _DIGITS_ONLY = re.compile(r"^\d{7,15}$")
+
+
+def _parse_gnani_time(value: Any) -> datetime | None:
+    """Parse Gnani's call timestamps: ``2026/07/31 00:10:32 +0000``."""
+    if not value or not isinstance(value, str):
+        return None
+    try:
+        return datetime.strptime(value.strip(), "%Y/%m/%d %H:%M:%S %z")
+    except ValueError:
+        return None
 _COUNTRY_CODE = re.compile(r"^\+\d{1,4}$")
 
 
@@ -138,12 +148,35 @@ class DynamicMessageResponse(BaseModel):
 
 
 class TranscriptTurn(BaseModel):
-    model_config = ConfigDict(extra="allow")
+    """One turn. Field names follow Gnani's actual transcript shape.
 
-    speaker: str
-    text: str
+    Captured from a real call: turns arrive as
+    ``{"role": "assistant"|"user", "content": "...", "timestamp": 1785436832.7}``
+    -- so ``role``/``content`` are accepted as aliases, and the timestamp is a
+    Unix float rather than an ISO string.
+    """
+
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    speaker: str = Field(validation_alias=AliasChoices("role", "speaker"))
+    text: str = Field(validation_alias=AliasChoices("content", "text"))
     timestamp: datetime | None = None
-    language: str | None = None
+    language: str | None = Field(
+        default=None, validation_alias=AliasChoices("detected_language", "language")
+    )
+
+    @field_validator("timestamp", mode="before")
+    @classmethod
+    def _unix_seconds(cls, v: Any) -> Any:
+        if isinstance(v, (int, float)):
+            return datetime.fromtimestamp(v, tz=timezone.utc)
+        return v
+
+    @field_validator("speaker", mode="before")
+    @classmethod
+    def _normalise_role(cls, v: Any) -> Any:
+        """Gnani says assistant/user; the dashboard renders agent/customer."""
+        return {"assistant": "agent", "user": "customer"}.get(v, v)
 
 
 class PostCallWebhookPayload(BaseModel):
@@ -192,6 +225,58 @@ class PostCallWebhookPayload(BaseModel):
     recording_url: str | None = None
 
     transcript: list[TranscriptTurn] = Field(default_factory=list)
+
+    @model_validator(mode="before")
+    @classmethod
+    def _flatten_gnani_shape(cls, data: Any) -> Any:
+        """Lift Gnani's nested extraction result up to the top level.
+
+        The Agents Console offers no body mapping, so the payload shape is
+        theirs. A real call delivers the seven configured extraction fields
+        inside ``disposition_result`` (duplicated as
+        ``post_call_extraction_v2``), while the stage code *also* appears at the
+        top level as ``STAGE_CODE``. Call timings live in
+        ``call_infra.call_status``.
+
+        Rather than scatter that knowledge through the service layer, the
+        translation happens once, here. Explicit top-level values always win, so
+        a hand-built payload (tests, Postman, the mock) is unaffected.
+        """
+        if not isinstance(data, dict):
+            return data
+
+        merged = dict(data)
+
+        extraction = data.get("disposition_result") or data.get(
+            "post_call_extraction_v2"
+        )
+        if isinstance(extraction, dict):
+            for key, value in extraction.items():
+                if merged.get(key) in (None, ""):
+                    merged[key] = value
+
+        infra = (data.get("call_infra") or {}).get("call_status")
+        if isinstance(infra, dict):
+            started = _parse_gnani_time(infra.get("callStartTime"))
+            ended = _parse_gnani_time(infra.get("callEndTime"))
+            if started and not merged.get("call_started_at"):
+                merged["call_started_at"] = started
+            if ended and not merged.get("call_ended_at"):
+                merged["call_ended_at"] = ended
+            if started and ended and not merged.get("call_duration_seconds"):
+                merged["call_duration_seconds"] = int(
+                    (ended - started).total_seconds()
+                )
+            if infra.get("callStatus") and not merged.get("call_status"):
+                merged["call_status"] = infra["callStatus"]
+            if infra.get("rec_path") and not merged.get("recording_url"):
+                merged["recording_url"] = infra["rec_path"]
+
+        # Gnani sends the turns under both keys; prefer whichever is populated.
+        if not merged.get("transcript") and data.get("conversation_log"):
+            merged["transcript"] = data["conversation_log"]
+
+        return merged
 
     @model_validator(mode="after")
     def _require_some_identifier(self) -> PostCallWebhookPayload:

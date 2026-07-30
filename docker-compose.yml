@@ -38,7 +38,12 @@ services:
     environment:
       # Container-internal hostnames override whatever .env holds for local runs.
       MONGO_URI: mongodb://mongo:27017
-      STORAGE_BACKEND: ${STORAGE_BACKEND:-mongo}
+      # Same trap as GNANI_BASE_URL below: env_file loads .env into the
+      # container, and ${STORAGE_BACKEND} would substitute from .env too -- so a
+      # local .env set to "json" would silently override the compose default and
+      # the container would run on the file backend while Mongo sat idle.
+      # A distinct variable name keeps the two environments independent.
+      STORAGE_BACKEND: ${STORAGE_BACKEND_DOCKER:-mongo}
       # Deliberately a *different* variable name from GNANI_BASE_URL. .env holds
       # the host-side value (127.0.0.1) for running uvicorn directly, and inside
       # a container that address points at the container itself -- so reusing the
