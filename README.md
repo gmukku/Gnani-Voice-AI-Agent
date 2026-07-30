@@ -175,6 +175,7 @@ tunnel setup, environment variables and troubleshooting — is in
 | Path | Contents |
 |---|---|
 | [`docs/deployment.md`](docs/deployment.md) | **Ports, containers, tunnel setup, env vars, troubleshooting** |
+| [`docs/test_results.md`](docs/test_results.md) | **Results for all 12 mandatory scenarios**, with five live calls |
 | [`docs/demo_script.md`](docs/demo_script.md) | The ten section 12 demonstration steps as a runbook |
 | [`docs/database_schema.md`](docs/database_schema.md) | Collections, indexes, storage decisions |
 | [`docs/test_scripts.md`](docs/test_scripts.md) | 18 scripted conversations, one per scenario |
