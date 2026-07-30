@@ -18,6 +18,7 @@ import json
 
 from fastapi import APIRouter, Depends, Request, Response, status
 
+from app.models.enums import StageCode
 from app.models.schemas import PostCallWebhookPayload, WebhookAck
 from app.routers.deps import get_call_service, require_webhook_key
 from app.services.call_service import CallNotFound, CallService
@@ -28,11 +29,105 @@ log = get_logger(__name__)
 router = APIRouter(prefix="/api/v1/webhooks", tags=["webhooks"])
 
 
+# The handler reads the raw body rather than binding a Pydantic model, so
+# FastAPI cannot derive a request schema. Declaring it explicitly keeps the
+# contract visible in Swagger -- this is the integration surface Gnani posts to,
+# so it is the last thing that should be undocumented.
+_POST_CALL_REQUEST_SCHEMA = {
+    "required": True,
+    "content": {
+        "application/json": {
+            "schema": {
+                "type": "object",
+                "required": ["conversation_id"],
+                "properties": {
+                    "conversation_id": {
+                        "type": "string",
+                        "description": "Gnani conversation id. The correlation key.",
+                    },
+                    "event_id": {
+                        "type": "string",
+                        "description": (
+                            "Idempotency key. When absent, a SHA-256 of the "
+                            "canonicalised payload is derived instead."
+                        ),
+                    },
+                    "DISPOSITION": {
+                        "type": "string",
+                        "enum": [s.value for s in StageCode],
+                        "description": (
+                            "Stage code. The Agents Console reserves this field "
+                            "name; 'disposition', 'stage_code' and 'STAGE_CODE' "
+                            "are also accepted via alias."
+                        ),
+                    },
+                    "ptp_date": {
+                        "type": "string",
+                        "description": (
+                            "ISO date, or the raw spoken phrase "
+                            "('today', 'the thirtieth', 'el treinta'), which is "
+                            "resolved server-side against the real call date."
+                        ),
+                    },
+                    "partial_amount": {"type": "string"},
+                    "disposition_reason": {"type": "string"},
+                    "disposition_summary": {"type": "string"},
+                    "language_captured": {
+                        "type": "string",
+                        "enum": ["English", "Spanish", "Mixed"],
+                    },
+                    "customer_sentiment": {
+                        "type": "string",
+                        "enum": ["Cooperative", "Neutral", "Frustrated", "Hostile"],
+                    },
+                    "call_status": {"type": "string"},
+                    "call_duration_seconds": {"type": "integer", "minimum": 0},
+                    "call_started_at": {"type": "string", "format": "date-time"},
+                    "call_ended_at": {"type": "string", "format": "date-time"},
+                    "recording_url": {"type": "string"},
+                    "transcript": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "speaker": {"type": "string"},
+                                "text": {"type": "string"},
+                                "timestamp": {"type": "string", "format": "date-time"},
+                                "language": {"type": "string"},
+                            },
+                        },
+                    },
+                },
+                "additionalProperties": True,
+                "example": {
+                    "conversation_id": "b842afc1-cb4e-4bcc-8d1a-42b9de62df4c",
+                    "event_id": "evt-b842afc1",
+                    "DISPOSITION": "PTP_FUTURE",
+                    "ptp_date": "the thirtieth",
+                    "disposition_reason": (
+                        "Customer said 'I can pay on the thirtieth' and "
+                        "confirmed it when read back."
+                    ),
+                    "language_captured": "English",
+                    "customer_sentiment": "Cooperative",
+                    "call_duration_seconds": 68,
+                    "transcript": [
+                        {"speaker": "agent", "text": "May I confirm who I am speaking with?"},
+                        {"speaker": "customer", "text": "I can pay on the thirtieth"},
+                    ],
+                },
+            }
+        }
+    },
+}
+
+
 @router.post(
     "/post-call",
     response_model=WebhookAck,
     dependencies=[Depends(require_webhook_key)],
     summary="Receive the post-call disposition from Gnani",
+    openapi_extra={"requestBody": _POST_CALL_REQUEST_SCHEMA},
     responses={
         200: {"description": "Processed, or a duplicate that was ignored"},
         202: {"description": "Accepted but unmatched; stored in the dead-letter queue"},
