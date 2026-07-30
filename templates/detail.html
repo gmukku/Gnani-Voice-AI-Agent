@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+{% block title %}{{ call.call_id }} &middot; Call Detail{% endblock %}
+
+{% block content %}
+
+<nav class="crumbs"><a href="/">← All calls</a></nav>
+
+<header class="detail-head">
+  <div>
+    <h1 class="detail-title"><code>{{ call.call_id }}</code></h1>
+    <p class="detail-sub">
+      {{ call.customer.customer_name }} &middot;
+      <code>{{ call.customer.phone_number }}</code>
+    </p>
+  </div>
+  <div class="detail-badges">
+    <span class="tag status-{{ call.call_status | lower }}">{{ call.call_status }}</span>
+    {% if call.stage_code %}
+    <span class="tag stage stage-{{ call.stage_code | lower }}">{{ call.stage_code }}</span>
+    {% endif %}
+  </div>
+</header>
+
+{# The guardrail overrode the model -- surfaced, never silent. #}
+{% if call.disposition_adjustments %}
+<section class="notice">
+  <strong>Disposition adjusted by the server-side guardrail</strong>
+  <ul>
+    {% for a in call.disposition_adjustments %}<li>{{ a }}</li>{% endfor %}
+  </ul>
+</section>
+{% endif %}
+
+<div class="cols">
+
+  {# --- Section 6.1: customer details ---------------------------------- #}
+  <section class="panel">
+    <h2 class="panel-title">Customer</h2>
+    <dl class="kv">
+      <dt>Customer ID</dt><dd>{{ call.customer.customer_id }}</dd>
+      <dt>Name</dt><dd>{{ call.customer.customer_name }}</dd>
+      <dt>Phone (masked)</dt><dd><code>{{ call.customer.phone_number }}</code></dd>
+      <dt>Loan account</dt><dd>{{ call.customer.loan_account_number }}</dd>
+      <dt>EMI amount</dt>
+      <dd>{{ call.emi_details.currency }} {{ '{:,.0f}'.format(call.emi_details.emi_amount or 0) }}</dd>
+      <dt>EMI due date</dt><dd>{{ call.emi_details.emi_due_date | dateonly }}</dd>
+    </dl>
+  </section>
+
+  {# --- Section 6.1: call metadata + timestamps ------------------------ #}
+  <section class="panel">
+    <h2 class="panel-title">Call metadata</h2>
+    <dl class="kv">
+      <dt>Status</dt><dd>{{ call.call_status }}</dd>
+      <dt>Duration</dt><dd>{{ call.call_duration_seconds | duration }}</dd>
+      <dt>Language captured</dt><dd>{{ call.language_captured or '—' }}</dd>
+      <dt>Sentiment</dt><dd>{{ call.customer_sentiment or '—' }}</dd>
+      <dt>Conversation ID</dt>
+      <dd><code class="wrap-any">{{ call.gnani_conversation_id or '—' }}</code></dd>
+      <dt>Initiated at</dt><dd>{{ call.created_at | datetime }}</dd>
+      <dt>Started at</dt><dd>{{ call.call_started_at | datetime }}</dd>
+      <dt>Completed at</dt><dd>{{ call.call_ended_at | datetime }}</dd>
+    </dl>
+  </section>
+</div>
+
+{# --- Section 6.1: disposition --------------------------------------- #}
+<section class="panel">
+  <h2 class="panel-title">Disposition</h2>
+  <dl class="kv kv-wide">
+    <dt>Stage code</dt>
+    <dd>
+      {% if call.stage_code %}
+      <span class="tag stage stage-{{ call.stage_code | lower }}">{{ call.stage_code }}</span>
+      {% else %}—{% endif %}
+    </dd>
+    <dt>Reason</dt><dd>{{ call.disposition_reason or '—' }}</dd>
+    <dt>Summary</dt><dd>{{ call.disposition_summary or '—' }}</dd>
+    <dt>PTP date</dt><dd>{{ call.ptp_date | dateonly }}</dd>
+  </dl>
+</section>
+
+{# --- Section 6.1: complete transcript ------------------------------- #}
+<section class="panel">
+  <div class="panel-head">
+    <h2 class="panel-title">
+      Transcript <span class="count">{{ call.conversation_transcript | length }}</span>
+    </h2>
+    {% if call.recording_url %}
+    <a class="btn btn-sm" href="{{ call.recording_url }}" target="_blank" rel="noopener">
+      Recording
+    </a>
+    {% endif %}
+  </div>
+
+  {% if call.conversation_transcript %}
+  <div class="chat">
+    {% for turn in call.conversation_transcript %}
+    <div class="turn turn-{{ 'agent' if turn.speaker in ('agent', 'bot') else 'customer' }}">
+      <div class="turn-meta">
+        {{ turn.speaker }}
+        {% if turn.timestamp %}<span class="dim">{{ turn.timestamp | datetime }}</span>{% endif %}
+      </div>
+      <div class="turn-text">{{ turn.text }}</div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <p class="empty">No transcript recorded.</p>
+  {% endif %}
+
+  {% if call.initial_message %}
+  <div class="subtle-block">
+    <span class="subtle-label">Opening message served to Gnani</span>
+    <p>{{ call.initial_message }}</p>
+  </div>
+  {% endif %}
+</section>
+
+{# --- Section 6.1: the two raw payloads ------------------------------ #}
+<div class="cols">
+  <section class="panel">
+    <h2 class="panel-title">Gnani call response</h2>
+    <pre class="json">{{ call.gnani_response | pretty }}</pre>
+  </section>
+
+  <section class="panel">
+    <h2 class="panel-title">Post-call webhook payload</h2>
+    <pre class="json">{{ call.post_call_payload | pretty }}</pre>
+  </section>
+</div>
+
+{% endblock %}

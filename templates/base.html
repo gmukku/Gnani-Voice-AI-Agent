@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}EMI Collection Dashboard{% endblock %}</title>
+  <link rel="stylesheet" href="/static/app.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="/">
+        <span class="brand-mark">●</span>
+        EMI Collection <span class="brand-dim">Voice Agent</span>
+      </a>
+      <div class="topbar-right">
+        <span id="ws-status" class="pill pill-idle" title="Live update channel">
+          <span class="dot"></span><span id="ws-label">connecting</span>
+        </span>
+        <a class="link" href="/docs">API docs</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="foot">
+    Gnani Agents Console &middot; Prisma ASR &middot; Evon v2.0 LLM &middot; Timbre G TTS
+  </footer>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

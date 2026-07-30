@@ -1,0 +1,157 @@
+{% extends "base.html" %}
+{% block title %}Call Outcomes &middot; EMI Collection{% endblock %}
+
+{% block content %}
+
+{# --- Section 6.2: eight summary cards --------------------------------- #}
+<section class="cards" aria-label="Summary">
+  {% for label, value in summary.items() %}
+  <div class="card{% if label == 'Total Calls' %} card-primary{% endif %}">
+    <div class="card-value">{{ value }}</div>
+    <div class="card-label">{{ label }}</div>
+  </div>
+  {% endfor %}
+</section>
+
+{# --- Bonus: stage-code distribution chart ----------------------------- #}
+{% if distribution %}
+<section class="panel">
+  <h2 class="panel-title">Stage code distribution</h2>
+  <div class="chart">
+    {% for item in distribution %}
+    <div class="chart-row">
+      <div class="chart-label"><code>{{ item.code }}</code></div>
+      <div class="chart-track">
+        <div class="chart-bar bar-{{ item.code | lower }}"
+             style="width: {{ item.percent }}%"></div>
+      </div>
+      <div class="chart-count">{{ item.count }}</div>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+
+{# --- Section 6.2: seven filters --------------------------------------- #}
+<section class="panel">
+  <div class="panel-head">
+    <h2 class="panel-title">Filters</h2>
+    <form class="bulk" action="/api/v1/calls/bulk" method="post"
+          enctype="multipart/form-data">
+      <label class="file-btn">
+        <input type="file" name="file" accept=".csv" onchange="this.form.submit()">
+        Bulk upload CSV
+      </label>
+    </form>
+  </div>
+
+  <form class="filters" method="get" action="/">
+    <label>Call date
+      <input type="date" name="call_date"
+             value="{{ filters.call_date.isoformat() if filters.call_date else '' }}">
+    </label>
+    <label>Call status
+      <select name="call_status">
+        <option value="">Any</option>
+        {% for s in statuses %}
+        <option value="{{ s }}" {% if filters.call_status == s %}selected{% endif %}>{{ s }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <label>Stage code
+      <select name="stage_code">
+        <option value="">Any</option>
+        {% for s in stage_codes %}
+        <option value="{{ s }}" {% if filters.stage_code == s %}selected{% endif %}>{{ s }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <label>Customer ID
+      <input type="text" name="customer_id" placeholder="CUST001"
+             value="{{ filters.customer_id or '' }}">
+    </label>
+    <label>Loan account
+      <input type="text" name="loan_account_number" placeholder="LAN123456"
+             value="{{ filters.loan_account_number or '' }}">
+    </label>
+    <label>Language
+      <select name="language">
+        <option value="">Any</option>
+        {% for l in languages %}
+        <option value="{{ l }}" {% if filters.language == l %}selected{% endif %}>{{ l }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <label>PTP date
+      <input type="date" name="ptp_date"
+             value="{{ filters.ptp_date.isoformat() if filters.ptp_date else '' }}">
+    </label>
+    <div class="filter-actions">
+      <button type="submit" class="btn btn-primary">Apply</button>
+      <a class="btn" href="/">Reset</a>
+    </div>
+  </form>
+</section>
+
+{# --- Section 6: call summary table, 13 columns ------------------------ #}
+<section class="panel">
+  <div class="panel-head">
+    <h2 class="panel-title">Calls <span class="count">{{ rows | length }}</span></h2>
+  </div>
+
+  <div class="table-scroll">
+    <table class="grid">
+      <thead>
+        <tr>
+          <th>Call ID</th>
+          <th>Customer ID</th>
+          <th>Customer Name</th>
+          <th>Phone</th>
+          <th>Loan Account</th>
+          <th>Initiated</th>
+          <th>Status</th>
+          <th class="num">Duration</th>
+          <th>Stage Code</th>
+          <th>Disposition Reason</th>
+          <th>PTP Date</th>
+          <th>Language</th>
+          <th>View Details</th>
+        </tr>
+      </thead>
+      <tbody id="calls-body">
+        {% for r in rows %}
+        <tr data-call-id="{{ r.call_id }}">
+          <td><code class="id">{{ r.call_id }}</code></td>
+          <td>{{ r.customer_id }}</td>
+          <td>{{ r.customer_name }}</td>
+          <td><code>{{ r.masked_phone_number }}</code></td>
+          <td>{{ r.loan_account_number }}</td>
+          <td class="dim">{{ r.call_initiated_time | datetime }}</td>
+          <td><span class="tag status-{{ r.call_status | lower }}">{{ r.call_status }}</span></td>
+          <td class="num">{{ r.call_duration | duration }}</td>
+          <td>
+            {% if r.stage_code %}
+            <span class="tag stage stage-{{ r.stage_code | lower }}">{{ r.stage_code }}</span>
+            {% else %}<span class="dim">&mdash;</span>{% endif %}
+          </td>
+          <td class="reason" title="{{ r.disposition_reason or '' }}">
+            {{ r.disposition_reason or '—' }}
+          </td>
+          <td>{{ r.ptp_date | dateonly }}</td>
+          <td>{{ r.language or '—' }}</td>
+          <td><a class="btn btn-sm" href="/calls/{{ r.call_id }}">View</a></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    {% if not rows %}
+    <p class="empty">
+      No calls yet. Initiate one with
+      <code>POST /api/Initial_Message</code>, or upload a CSV above.
+    </p>
+    {% endif %}
+  </div>
+</section>
+
+{% endblock %}
