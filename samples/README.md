@@ -7,9 +7,10 @@ Evidence captured from real calls, not hand-written examples.
 Call audio downloaded from the Agents Console, named
 `call-recording-<conversation_id>.mp3`.
 
-| Recording | Call | Stage code | Duration |
+| Recording (`call-recording-<conversation_id>.mp3`) | Call | Stage code | Duration |
 |---|---|---|---|
-| `call-recording-c5018b6b-0640-4cca-93e5-7a6b2b5d367a.mp3` | `CALL-20260730-671714` | `ALREADY_PAID` | 85s |
+| `…c5018b6b-0640-4cca-93e5-7a6b2b5d367a` | `CALL-20260730-671714` | `ALREADY_PAID` | 85s |
+| `…da4f69d6-ec4b-4a3b-9abc-32713ed1ffe0` | `CALL-20260730-b63412` | `DISPUTE_CHARGES` | 87s |
 
 The conversation id in the filename is the join key. For any recording you can
 trace the same conversation through:
