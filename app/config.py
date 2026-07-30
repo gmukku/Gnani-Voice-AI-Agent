@@ -62,6 +62,13 @@ class Settings(BaseSettings):
     gnani_stt_api_key: SecretStr = SecretStr("")
     gnani_tts_api_key: SecretStr = SecretStr("")
 
+    #: Record post-call webhooks for calls this service did not initiate --
+    #: console Web-based (Voice) tests and Trigger Agent Call. Those carry real
+    #: Prisma transcripts and real dispositions, so they belong on the
+    #: dashboard rather than in the dead-letter queue. Set false to accept only
+    #: calls started through /api/Initial_Message.
+    adopt_console_calls: bool = True
+
     # --- Security -------------------------------------------------------
     #: Shared secret Gnani must present on the post-call webhook.
     webhook_api_key: SecretStr = SecretStr("")

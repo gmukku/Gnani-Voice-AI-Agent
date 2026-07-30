@@ -112,6 +112,7 @@ def _detail(record: dict[str, Any]) -> dict[str, Any]:
 
     return {
         "call_id": record.get("call_id"),
+        "origin": record.get("origin", "api"),
         "customer": customer,
         "emi_details": record.get("emi_details", {}),
         "call_status": record.get("call_status"),

@@ -232,9 +232,53 @@ class TestPostCallWebhook:
             "status"
         ] == "duplicate_ignored"
 
-    async def test_unmatched_event_is_dead_lettered(
+    async def test_console_initiated_call_is_adopted(
         self, repo, settings
     ) -> None:
+        """A call placed from the console still carries a real disposition.
+
+        Web-based (Voice) tests and Trigger Agent Call do not go through
+        /api/Initial_Message, so no record exists to correlate against. The
+        webhook creates one rather than dead-lettering a genuine outcome.
+        """
+        service = make_service(repo, settings)
+        payload = post_call_payload("console-conversation-1")
+
+        result = await service.apply_post_call(
+            payload, payload.model_dump(mode="json")
+        )
+
+        assert result["status"] == "processed"
+        calls = await repo.list_calls()
+        assert len(calls) == 1
+        adopted = calls[0]
+        assert adopted["origin"] == "gnani_console"
+        assert adopted["gnani_conversation_id"] == "console-conversation-1"
+        assert adopted["call_status"] == CallStatus.COMPLETED
+        # The disposition still runs through the guardrail.
+        assert adopted["stage_code"] == StageCode.PTP_TOMORROW
+        assert adopted["ptp_date"] == "2026-07-30"
+        # Customer fields stay blank: the console never sent them.
+        assert adopted["customer"]["customer_id"] == ""
+
+    async def test_adopted_call_is_still_idempotent(
+        self, repo, settings
+    ) -> None:
+        service = make_service(repo, settings)
+        payload = post_call_payload("console-conversation-2")
+        raw = payload.model_dump(mode="json")
+
+        first = await service.apply_post_call(payload, raw)
+        second = await service.apply_post_call(payload, raw)
+
+        assert first["status"] == "processed"
+        assert second["status"] == "duplicate_ignored"
+        assert len(await repo.list_calls()) == 1, "adoption must not run twice"
+
+    async def test_unmatched_event_is_dead_lettered_when_adoption_is_off(
+        self, repo, settings
+    ) -> None:
+        settings.adopt_console_calls = False
         service = make_service(repo, settings)
         payload = post_call_payload("nobody-knows-me")
 

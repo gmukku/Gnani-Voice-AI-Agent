@@ -239,6 +239,77 @@ class CallService:
 
     # -- 5.3 ------------------------------------------------------------
 
+    async def _adopt_console_call(
+        self, payload: PostCallWebhookPayload, raw: dict[str, Any]
+    ) -> dict[str, Any]:
+        """Create a record for a call this service did not initiate.
+
+        Not every call starts at ``/api/Initial_Message``. A call placed from
+        the Agents Console -- a Web-based (Voice) test, or an operator using
+        Trigger Agent Call -- still produces a post-call webhook, and that
+        webhook carries the genuine article: a real Prisma transcript, a real
+        Evon conversation, and a real disposition from the extraction fields.
+
+        Dead-lettering those would mean the dashboard could only ever show
+        calls we started, which is the wrong trade: an unmatched event with a
+        valid disposition is worth more as a record than as a DLQ entry. The
+        customer fields are unknown because the console did not receive them,
+        so they are left blank rather than invented.
+        """
+        call_id = new_call_id()
+        log.info(
+            "webhook.adopted_console_call",
+            call_id=call_id,
+            conversation_id=payload.conversation_id,
+        )
+
+        record: dict[str, Any] = {
+            "call_id": call_id,
+            "gnani_conversation_id": payload.conversation_id,
+            #: Distinguishes these from calls we initiated, so the dashboard
+            #: and any later reconciliation can tell them apart.
+            "origin": "gnani_console",
+            "customer": {
+                "customer_id": "",
+                "customer_name": "",
+                "phone_number": "",
+                "country_code": "",
+                "phone_e164": "",
+                "phone_suffix": "",
+                "loan_account_number": "",
+            },
+            "emi_details": {},
+            "call_request": None,
+            "pre_call_variables": {},
+            "initial_message": None,
+            "gnani_response": None,
+            "post_call_payload": None,
+            "call_status": CallStatus.IN_PROGRESS,
+            "stage_code": None,
+            "disposition_reason": None,
+            "disposition_summary": None,
+            "disposition_adjustments": [],
+            "ptp_date": None,
+            "partial_amount": None,
+            "language_captured": None,
+            "customer_sentiment": None,
+            "conversation_transcript": [],
+            "call_duration_seconds": None,
+            "recording_url": None,
+            "call_started_at": payload.call_started_at,
+            "call_ended_at": None,
+            "created_at": payload.call_started_at or utcnow(),
+            "updated_at": utcnow(),
+        }
+        await self._repo.insert_call(record)
+        await self._repo.audit(
+            call_id,
+            "call.adopted",
+            {"conversation_id": payload.conversation_id, "origin": "gnani_console"},
+        )
+        await hub.broadcast("call.created", {"call_id": call_id})
+        return record
+
     @staticmethod
     def derive_event_id(payload: dict[str, Any]) -> str:
         """Stable idempotency key for payloads that carry no event id."""
@@ -267,11 +338,16 @@ class CallService:
             call = await self._repo.get_call(payload.call_id)
 
         if call is None:
-            log.warning("webhook.unmatched", conversation_id=payload.conversation_id)
-            await self._repo.dead_letter("post_call_unmatched", raw)
-            raise CallNotFound(
-                f"No call matches conversation_id={payload.conversation_id!r}"
-            )
+            if self._settings.adopt_console_calls:
+                call = await self._adopt_console_call(payload, raw)
+            else:
+                log.warning(
+                    "webhook.unmatched", conversation_id=payload.conversation_id
+                )
+                await self._repo.dead_letter("post_call_unmatched", raw)
+                raise CallNotFound(
+                    f"No call matches conversation_id={payload.conversation_id!r}"
+                )
 
         call_id = call["call_id"]
         bind_call_context(call_id=call_id, conversation_id=payload.conversation_id)
