@@ -153,15 +153,26 @@ python -m scripts.seed_scenarios           # populate the dashboard
 Drop `--profile mock` to run api + mongo only. The dashboard is on
 `http://localhost:8000`.
 
-### Deliverables
+Three containers start under the project name **`emi-voice-agent`**: `api` (8000),
+`mongo` (27017), `mock-console` (9100). Full operational detail — ports, images,
+tunnel setup, environment variables and troubleshooting — is in
+[`docs/deployment.md`](docs/deployment.md).
+
+### Where everything is
 
 | Path | Contents |
 |---|---|
-| `docs/demo_script.md` | The ten section 12 demonstration steps as a runbook |
-| `docs/stage_code_accuracy.md` | Generated accuracy report |
+| [`docs/deployment.md`](docs/deployment.md) | **Ports, containers, tunnel setup, env vars, troubleshooting** |
+| [`docs/demo_script.md`](docs/demo_script.md) | The ten section 12 demonstration steps as a runbook |
+| [`docs/database_schema.md`](docs/database_schema.md) | Collections, indexes, storage decisions |
+| [`docs/test_scripts.md`](docs/test_scripts.md) | 18 scripted conversations, one per scenario |
+| [`docs/stage_code_accuracy.md`](docs/stage_code_accuracy.md) | Generated accuracy report |
+| [`gnani/conversation_flow.md`](gnani/conversation_flow.md) | Stage machine, slot ledger, branch matrix |
+| `gnani/` | System prompt, extraction config, language-switch prompt |
 | `postman_collection.json` | 17 requests across 6 folders, with assertions |
-| `gnani/` | System prompt, extraction config, conversation-flow config |
+| `samples/webhooks/` | **Real captured Gnani payloads**, redacted |
 | `samples/bulk_calls.csv` | CSV for the bulk-upload endpoint |
+| `scripts/` | Scenario seeding, demo-data cleanup, sample export |
 
 ---
 
