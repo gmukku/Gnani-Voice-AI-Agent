@@ -203,7 +203,7 @@ minutes — analytics generation is not instant.
 ```bash
 curl http://localhost:8000/health     # {"status":"ok",...}
 curl http://localhost:8000/ready      # confirms the live storage backend
-pytest -q                             # 135 tests
+pytest -q                             # 137 tests
 python -m tests.test_disposition_accuracy
 ```
 

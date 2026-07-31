@@ -17,7 +17,7 @@ stated — the distinction matters, and telephony limits (see
 | Real calls through the live Gnani platform | **5** |
 | Scenarios exercised end to end via `mock_gnani` | 10 |
 | Failure paths verified against the running API | 3 |
-| Automated tests | **135**, all passing |
+| Automated tests | **137** cases across 87 test functions, all passing |
 | Stage-code accuracy on a labelled corpus | **100%** (27/27) |
 | Call recordings captured | 5 |
 | Real webhook payloads captured | 5 |
@@ -227,17 +227,20 @@ rather than accepting anything.
 ## Automated tests
 
 ```
-135 passed
+137 passed
 ruff: All checks passed
 mypy: no issues found in 27 source files
 ```
 
-| Suite | Tests | Covers |
+Counts are collected cases; `@parametrize` expands one function into several,
+so 87 test functions produce 137 cases.
+
+| Suite | Cases | Covers |
 |---|---|---|
 | `test_disposition.py` | 51 | Guardrail rules, spoken-date resolution |
-| `test_masking_and_phone.py` | 40 | Section 6.1 masking, phone-format correlation |
-| `test_greeting.py` | 25 | Identity gate, TTS safety, variable completeness |
 | `test_webhook_lifecycle.py` | 25 | Sections 5.1–5.3, idempotency, adoption, ordering |
+| `test_masking_and_phone.py` | 21 | Section 6.1 masking, phone-format correlation |
+| `test_greeting.py` | 19 | Identity gate, TTS safety, variable completeness |
 | `test_gnani_client.py` | 10 | Retry policy, timeouts, real payload shapes |
 | `test_bson_encoding.py` | 6 | Regression: BSON date encoding |
 | `test_disposition_accuracy.py` | 5 | Labelled corpus, confusion matrix |
