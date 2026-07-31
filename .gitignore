@@ -24,3 +24,6 @@ Thumbs.db
 .idea/
 .vscode/
 .claude/
+
+# The assignment brief is Gnani's document, not ours to redistribute
+Gnani FDE Assignment.pdf
