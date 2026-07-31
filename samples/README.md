@@ -30,6 +30,36 @@ trace the same conversation through:
 - the stored call record — `db.calls.find({gnani_conversation_id: "<id>"})`
 - the dashboard detail page, which shows the transcript and the raw payload
 
+## `console-analytics/`
+
+Gnani's own post-call analytics for conversation `c5018b6b…`, the `ALREADY_PAID`
+call. Three screenshots: the conversation overview, the Post Call Extraction V2
+panel beside the transcript, and the extraction fields in full.
+
+**They independently corroborate the stored record.** Every field the console
+reports matches what arrived through the webhook and was written to MongoDB:
+
+| Field | Gnani console | Our record |
+|---|---|---|
+| Duration | 1m 25s | 85s |
+| `customerSentiment` | Frustrated | Frustrated |
+| `languageCaptured` | English | English |
+| `dispositionReason` | *"Customer said, \"I think I already paid this amount\"…"* | identical |
+
+**The transcript also shows the identity gate working under pressure.** Asked
+*"uh yes who is this"* before confirming identity, the agent replied:
+
+> *"I am calling on behalf of ICICI Bank regarding the loan account ending in
+> 3456. Am I speaking with Rahul Sharma?"*
+
+It named the lender and the account's last four digits, and **withheld the
+amount and the due date** until identity was confirmed — the section 5.2 rule,
+observed live rather than asserted.
+
+Gnani's console also surfaces per-turn sentiment and emotion (that turn is
+tagged *Neutral / Confusion*), which is richer than the seven fields extracted
+here.
+
 ## `webhooks/`
 
 Post-call payloads exactly as Gnani sent them, one per stage code observed.
