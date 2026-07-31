@@ -22,10 +22,10 @@ class TestMaskPhone:
         ("raw", "expected"),
         [
             # The mask length tracks the digit count, so a country code adds stars.
-            ("+15551234567", "*******9318"),      # 11 digits
-            ("878-834-9318", "******9318"),       # 10 digits, separators stripped
-            ("(878) 834 9318", "******9318"),     # 10 digits
-            ("+91 98947 77373", "********7373"),  # 12 digits
+            ("+15551234567", "*******4567"),      # 11 digits
+            ("555-123-4567", "******4567"),       # 10 digits, separators stripped
+            ("(555) 123 4567", "******4567"),     # 10 digits
+            ("+91 91234 56789", "********6789"),  # 12 digits
         ],
     )
     def test_separators_and_country_codes(self, raw: str, expected: str) -> None:
@@ -43,8 +43,8 @@ class TestMaskPhone:
 
     def test_only_last_four_digits_survive(self) -> None:
         masked = mask_phone("+919123456789")
-        assert masked.endswith("7373")
-        assert "989477" not in masked
+        assert masked.endswith("6789")
+        assert "912345" not in masked
 
 
 class TestMaskAccount:
@@ -62,7 +62,7 @@ class TestMaskAccount:
 class TestPhoneCorrelation:
     def test_all_formats_of_one_number_collapse(self) -> None:
         """The bug this exists to prevent: same number, three formats."""
-        forms = ["9123456789", "+919123456789", "0919123456789", "+91 98947 77373"]
+        forms = ["9123456789", "+919123456789", "0919123456789", "+91 91234 56789"]
         keys = {phone_suffix(f) for f in forms}
         assert len(keys) == 1, f"formats did not collapse: {keys}"
 
@@ -74,7 +74,7 @@ class TestPhoneCorrelation:
         assert phone_suffix("+919123456789") != phone_suffix("+15551234567")
 
     def test_digits_only_strips_everything_else(self) -> None:
-        assert digits_only("+1 (878) 834-9318") == "15551234567"
+        assert digits_only("+1 (555) 123-4567") == "15551234567"
 
     @pytest.mark.parametrize("raw", ["", None])
     def test_empty_input(self, raw: str | None) -> None:

@@ -290,7 +290,7 @@ than a per-case check.
 | Date awareness | A bare day number is no longer read as today |
 | Dashboard live update | Rows update on webhook arrival without a reload |
 | Dashboard filters | All seven filter correctly, individually and combined |
-| Phone masking | `*******7373` everywhere; `phone_e164` absent from all API responses |
+| Phone masking | `*******0001` everywhere; `phone_e164` absent from all API responses |
 | CSV bulk upload | 4 accepted, 1 rejected, per-row errors reported |
 
 ---

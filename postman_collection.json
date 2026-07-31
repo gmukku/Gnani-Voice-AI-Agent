@@ -75,7 +75,7 @@
             "header": [{ "key": "Content-Type", "value": "application/json" }],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"customer_id\": \"CUST008\",\n  \"customer_name\": \"Ana Torres\",\n  \"phone_number\": \"9894777308\",\n  \"country_code\": \"+91\",\n  \"loan_account_number\": \"LAN100008\",\n  \"emi_amount\": 12500,\n  \"emi_due_date\": \"2026-07-30\",\n  \"preferred_language\": \"es\",\n  \"currency\": \"INR\"\n}"
+              "raw": "{\n  \"customer_id\": \"CUST008\",\n  \"customer_name\": \"Ana Torres\",\n  \"phone_number\": \"9000007308\",\n  \"country_code\": \"+91\",\n  \"loan_account_number\": \"LAN100008\",\n  \"emi_amount\": 12500,\n  \"emi_due_date\": \"2026-07-30\",\n  \"preferred_language\": \"es\",\n  \"currency\": \"INR\"\n}"
             },
             "url": {
               "raw": "{{base_url}}/api/Initial_Message",

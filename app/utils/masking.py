@@ -18,7 +18,7 @@ def mask_phone(phone: str | None, visible: int = VISIBLE_DIGITS) -> str:
     >>> mask_phone("9876543210")
     '******3210'
     >>> mask_phone("+15551234567")
-    '********9318'
+    '********4567'
 
     Non-digit characters (``+``, spaces, hyphens) are dropped so the mask
     length reflects the actual digits. Short or missing values mask entirely

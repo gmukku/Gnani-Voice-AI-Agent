@@ -21,7 +21,9 @@ from app.db.repository import build_repository
 
 OUT_DIR = Path("samples/webhooks")
 
-#: Values tied to the Gnani account rather than to the call itself.
+#: Values tied to the Gnani account or the operator rather than to the call.
+#: ``dstPhone`` carries the whitelisted contact's name, and ``srcPhone`` /
+#: ``customerPhone`` would carry real numbers on a PSTN call.
 REDACT = {
     "user_name",
     "user_id",
@@ -32,6 +34,9 @@ REDACT = {
     "sender_id",
     "customerCRTId",
     "call_uid",
+    "dstPhone",
+    "srcPhone",
+    "customerPhone",
 }
 
 
